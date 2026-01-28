@@ -1,26 +1,23 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  title: "Forgedveloci | Ultra Premium Forged Wheels",
-  description: "Bespoke forged wheels engineered for automotive excellence. Experience the pinnacle of wheel craftsmanship.",
-  keywords: ["forged wheels", "luxury wheels", "bespoke wheels", "automotive", "premium"],
-  authors: [{ name: "Forgedveloci" }],
+  title: "ForgedVeloci | Exklusiva Smidda Fälgar",
+  description: "Sveriges ledande ateljé för skräddarsydda smidda fälgar. Upplev perfektion i varje detalj.",
+  keywords: ["smidda fälgar", "lyxfälgar", "custom fälgar", "bilfälgar", "premium fälgar", "Sverige"],
+  authors: [{ name: "ForgedVeloci" }],
   openGraph: {
-    title: "Forgedveloci | Ultra Premium Forged Wheels",
-    description: "Bespoke forged wheels engineered for automotive excellence.",
+    title: "ForgedVeloci | Exklusiva Smidda Fälgar",
+    description: "Sveriges ledande ateljé för skräddarsydda smidda fälgar.",
     type: "website",
-    locale: "en_US",
+    locale: "sv_SE",
   },
   robots: "index, follow",
-  themeColor: "#0a0a0a",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#050505",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -29,12 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="sv" className="dark">
       <head>
         <link rel="icon" href="/favicon.ico" />
-        <meta name="color-scheme" content="dark" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className="antialiased">
         {children}
       </body>
     </html>

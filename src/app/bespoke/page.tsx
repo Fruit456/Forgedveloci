@@ -13,10 +13,12 @@ export default function BespokePage() {
         desiredFinish: "",
         notes: "",
         email: "",
+        phone: "",
         disclaimerAccepted: false,
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [dragActive, setDragActive] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
@@ -32,40 +34,47 @@ export default function BespokePage() {
         if (!formData.disclaimerAccepted) return;
 
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 2500));
         setIsSubmitting(false);
         setIsSubmitted(true);
     };
 
     if (isSubmitted) {
         return (
-            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-6">
+            <div className="min-h-screen bg-[#050505] flex items-center justify-center px-6">
                 <motion.div
-                    className="text-center max-w-md"
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    className="text-center max-w-lg"
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8 }}
                 >
+                    {/* Success Icon */}
                     <motion.div
-                        className="w-20 h-20 mx-auto mb-8 rounded-full bg-[#c9a962]/10 flex items-center justify-center"
+                        className="w-24 h-24 mx-auto mb-10 relative"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
-                        transition={{ type: "spring", delay: 0.2 }}
+                        transition={{ type: "spring", delay: 0.2, duration: 0.8 }}
                     >
-                        <svg className="w-10 h-10 text-[#c9a962]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
+                        <div className="absolute inset-0 border border-[#d4b896]/20 rounded-full" />
+                        <div className="absolute inset-2 border border-[#d4b896]/40 rounded-full" />
+                        <div className="absolute inset-4 bg-[#d4b896]/10 rounded-full flex items-center justify-center">
+                            <svg className="w-8 h-8 text-[#d4b896]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
                     </motion.div>
-                    <h1 className="text-3xl font-bold text-[#ededed] mb-4">Request Submitted</h1>
-                    <p className="text-[#a3a3a3] mb-8">
-                        Our engineering team will review your bespoke request and contact you within 48 hours with a quote.
+
+                    <h1 className="font-display text-4xl text-white mb-4">Förfrågan Mottagen</h1>
+                    <p className="text-[#606060] text-base leading-relaxed mb-10">
+                        Vårt ingenjörsteam kommer granska din begäran och kontakta dig inom 48 timmar med en offert.
                     </p>
+
                     <Link href="/">
                         <motion.button
-                            className="px-8 py-4 border border-[#333] text-[#ededed] rounded-full hover:border-[#c9a962] transition-colors"
-                            whileHover={{ scale: 1.05 }}
+                            className="px-10 py-4 border border-[#252525] text-[12px] uppercase tracking-[0.2em] text-[#808080] hover:border-[#d4b896] hover:text-[#d4b896] transition-all duration-500"
+                            whileHover={{ scale: 1.02 }}
                         >
-                            Return Home
+                            Tillbaka till Start
                         </motion.button>
                     </Link>
                 </motion.div>
@@ -74,220 +83,277 @@ export default function BespokePage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a]">
+        <div className="min-h-screen bg-[#050505]">
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 px-8 py-6 glass">
-                <nav className="max-w-7xl mx-auto flex items-center justify-between">
-                    <Link href="/" className="text-2xl font-bold tracking-tight">
-                        <span className="text-[#ededed]">FORGED</span>
-                        <span className="text-gradient-bronze">VELOCI</span>
+            <header className="fixed top-0 left-0 right-0 z-50 glass">
+                <nav className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
+                    <Link href="/" className="group">
+                        <span className="font-display text-2xl tracking-wide text-white">Forged</span>
+                        <span className="font-display text-2xl tracking-wide text-gradient-gold">Veloci</span>
                     </Link>
                     <Link
                         href="/collection"
-                        className="text-sm text-[#a3a3a3] hover:text-[#ededed] transition-colors"
+                        className="text-[12px] uppercase tracking-[0.15em] text-[#606060] hover:text-[#d4b896] transition-colors duration-500"
                     >
-                        View Collection
+                        Kollektion
                     </Link>
                 </nav>
             </header>
 
-            <main className="pt-32 pb-20 px-6">
+            <main className="pt-40 pb-24 px-6">
                 <div className="max-w-2xl mx-auto">
-                    {/* Header */}
+                    {/* Page Header */}
                     <motion.div
-                        className="text-center mb-12"
-                        initial={{ opacity: 0, y: 20 }}
+                        className="text-center mb-16"
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
                     >
-                        <p className="text-[#c9a962] text-sm uppercase tracking-[0.3em] mb-4">Bespoke Studio</p>
-                        <h1 className="text-4xl md:text-5xl font-bold text-[#ededed] mb-4">
-                            Create Your Vision
+                        <p className="text-[11px] uppercase tracking-[0.4em] text-[#d4b896]/60 mb-4">Bespoke Ateljé</p>
+                        <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-white mb-6">
+                            Skapa Din
+                            <span className="block text-gradient-gold italic">Egen Vision</span>
                         </h1>
-                        <p className="text-[#a3a3a3] text-lg">
-                            Commission a unique set of forged wheels, tailored to your exact specifications.
+                        <p className="text-[#606060] text-base max-w-md mx-auto leading-relaxed">
+                            Beställ ett unikt set smidda fälgar, skräddarsydda efter dina exakta specifikationer.
                         </p>
+
+                        {/* Decorative line */}
+                        <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#d4b896]/30 to-transparent mx-auto mt-10" />
                     </motion.div>
 
                     {/* Form */}
                     <motion.form
                         onSubmit={handleSubmit}
-                        className="space-y-8"
-                        initial={{ opacity: 0, y: 30 }}
+                        className="space-y-12"
+                        initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
                     >
                         {/* Vehicle Section */}
-                        <div className="space-y-4">
-                            <h2 className="text-[#ededed] text-lg font-semibold border-b border-[#1a1a1a] pb-2">
-                                Vehicle Details
-                            </h2>
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-4 mb-8">
+                                <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4b896]">01</span>
+                                <div className="flex-1 h-px bg-[#1a1a1a]" />
+                                <h2 className="text-[12px] uppercase tracking-[0.2em] text-[#808080]">Fordon</h2>
+                            </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-[#737373] text-sm mb-2">Make</label>
+                                    <label className="block text-[10px] uppercase tracking-[0.2em] text-[#505050] mb-3">Märke</label>
                                     <input
                                         type="text"
                                         name="vehicleMake"
                                         value={formData.vehicleMake}
                                         onChange={handleChange}
-                                        placeholder="e.g., BMW"
+                                        placeholder="t.ex. BMW"
                                         required
-                                        className="w-full px-4 py-3 rounded-lg"
+                                        className="w-full px-5 py-4 bg-[#0a0a0a] border border-[#1a1a1a] text-white placeholder-[#404040] focus:border-[#d4b896] transition-all duration-500"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[#737373] text-sm mb-2">Model</label>
+                                    <label className="block text-[10px] uppercase tracking-[0.2em] text-[#505050] mb-3">Modell</label>
                                     <input
                                         type="text"
                                         name="vehicleModel"
                                         value={formData.vehicleModel}
                                         onChange={handleChange}
-                                        placeholder="e.g., M4 Competition"
+                                        placeholder="t.ex. M4 Competition"
                                         required
-                                        className="w-full px-4 py-3 rounded-lg"
+                                        className="w-full px-5 py-4 bg-[#0a0a0a] border border-[#1a1a1a] text-white placeholder-[#404040] focus:border-[#d4b896] transition-all duration-500"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-[#737373] text-sm mb-2">Year</label>
+                                <label className="block text-[10px] uppercase tracking-[0.2em] text-[#505050] mb-3">Årsmodell</label>
                                 <input
                                     type="text"
                                     name="vehicleYear"
                                     value={formData.vehicleYear}
                                     onChange={handleChange}
-                                    placeholder="e.g., 2024"
-                                    className="w-full px-4 py-3 rounded-lg"
+                                    placeholder="t.ex. 2024"
+                                    className="w-full px-5 py-4 bg-[#0a0a0a] border border-[#1a1a1a] text-white placeholder-[#404040] focus:border-[#d4b896] transition-all duration-500"
                                 />
                             </div>
                         </div>
 
                         {/* Wheel Specifications */}
-                        <div className="space-y-4">
-                            <h2 className="text-[#ededed] text-lg font-semibold border-b border-[#1a1a1a] pb-2">
-                                Wheel Specifications
-                            </h2>
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-4 mb-8">
+                                <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4b896]">02</span>
+                                <div className="flex-1 h-px bg-[#1a1a1a]" />
+                                <h2 className="text-[12px] uppercase tracking-[0.2em] text-[#808080]">Specifikationer</h2>
+                            </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block text-[#737373] text-sm mb-2">Desired Size</label>
+                                    <label className="block text-[10px] uppercase tracking-[0.2em] text-[#505050] mb-3">Önskad Storlek</label>
                                     <select
                                         name="desiredSize"
                                         value={formData.desiredSize}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 rounded-lg"
+                                        className="w-full px-5 py-4 bg-[#0a0a0a] border border-[#1a1a1a] text-white focus:border-[#d4b896] transition-all duration-500 appearance-none cursor-pointer"
+                                        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23505050'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1.5rem' }}
                                     >
-                                        <option value="">Select size</option>
-                                        <option value="18">18 inch</option>
-                                        <option value="19">19 inch</option>
-                                        <option value="20">20 inch</option>
-                                        <option value="21">21 inch</option>
-                                        <option value="22">22 inch</option>
-                                        <option value="custom">Custom</option>
+                                        <option value="">Välj storlek</option>
+                                        <option value="18">18 tum</option>
+                                        <option value="19">19 tum</option>
+                                        <option value="20">20 tum</option>
+                                        <option value="21">21 tum</option>
+                                        <option value="22">22 tum</option>
+                                        <option value="custom">Specialmått</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-[#737373] text-sm mb-2">Finish Preference</label>
+                                    <label className="block text-[10px] uppercase tracking-[0.2em] text-[#505050] mb-3">Önskad Finish</label>
                                     <input
                                         type="text"
                                         name="desiredFinish"
                                         value={formData.desiredFinish}
                                         onChange={handleChange}
-                                        placeholder="e.g., Brushed Bronze"
-                                        className="w-full px-4 py-3 rounded-lg"
+                                        placeholder="t.ex. Borstad Brons"
+                                        className="w-full px-5 py-4 bg-[#0a0a0a] border border-[#1a1a1a] text-white placeholder-[#404040] focus:border-[#d4b896] transition-all duration-500"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-[#737373] text-sm mb-2">Additional Notes</label>
+                                <label className="block text-[10px] uppercase tracking-[0.2em] text-[#505050] mb-3">Din Vision</label>
                                 <textarea
                                     name="notes"
                                     value={formData.notes}
                                     onChange={handleChange}
-                                    placeholder="Describe your vision, inspiration, or specific requirements..."
+                                    placeholder="Beskriv dina önskemål, inspiration eller specifika krav..."
                                     rows={4}
-                                    className="w-full px-4 py-3 rounded-lg resize-none"
+                                    className="w-full px-5 py-4 bg-[#0a0a0a] border border-[#1a1a1a] text-white placeholder-[#404040] focus:border-[#d4b896] transition-all duration-500 resize-none"
                                 />
                             </div>
                         </div>
 
-                        {/* Upload Zone (placeholder) */}
-                        <div className="space-y-4">
-                            <h2 className="text-[#ededed] text-lg font-semibold border-b border-[#1a1a1a] pb-2">
-                                Reference Image
-                            </h2>
+                        {/* Upload Zone */}
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-4 mb-8">
+                                <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4b896]">03</span>
+                                <div className="flex-1 h-px bg-[#1a1a1a]" />
+                                <h2 className="text-[12px] uppercase tracking-[0.2em] text-[#808080]">Referensbild</h2>
+                            </div>
 
                             <motion.div
-                                className="border-2 border-dashed border-[#333] rounded-xl p-8 text-center cursor-pointer hover:border-[#c9a962]/50 transition-colors"
-                                whileHover={{ scale: 1.01 }}
+                                className={`relative border border-dashed ${dragActive ? 'border-[#d4b896]' : 'border-[#252525]'} p-12 text-center cursor-pointer transition-all duration-500 hover:border-[#d4b896]/50`}
+                                onDragEnter={() => setDragActive(true)}
+                                onDragLeave={() => setDragActive(false)}
+                                onDrop={() => setDragActive(false)}
+                                whileHover={{ scale: 1.005 }}
                             >
-                                <svg className="w-12 h-12 mx-auto text-[#525252] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                {/* Corner decorations */}
+                                <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-[#d4b896]/20" />
+                                <div className="absolute top-0 right-0 w-4 h-4 border-t border-r border-[#d4b896]/20" />
+                                <div className="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-[#d4b896]/20" />
+                                <div className="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-[#d4b896]/20" />
+
+                                <svg className="w-10 h-10 mx-auto text-[#303030] mb-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                <p className="text-[#737373] mb-1">Drop an inspiration image here</p>
-                                <p className="text-[#525252] text-sm">or click to browse</p>
+                                <p className="text-[#505050] text-sm mb-2">Dra och släpp en inspirationsbild</p>
+                                <p className="text-[#303030] text-xs">eller klicka för att bläddra</p>
                             </motion.div>
                         </div>
 
                         {/* Contact */}
-                        <div className="space-y-4">
-                            <h2 className="text-[#ededed] text-lg font-semibold border-b border-[#1a1a1a] pb-2">
-                                Contact
-                            </h2>
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-4 mb-8">
+                                <span className="text-[10px] uppercase tracking-[0.3em] text-[#d4b896]">04</span>
+                                <div className="flex-1 h-px bg-[#1a1a1a]" />
+                                <h2 className="text-[12px] uppercase tracking-[0.2em] text-[#808080]">Kontaktuppgifter</h2>
+                            </div>
 
-                            <div>
-                                <label className="block text-[#737373] text-sm mb-2">Email</label>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    placeholder="your@email.com"
-                                    required
-                                    className="w-full px-4 py-3 rounded-lg"
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label className="block text-[10px] uppercase tracking-[0.2em] text-[#505050] mb-3">E-post</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        placeholder="din@email.se"
+                                        required
+                                        className="w-full px-5 py-4 bg-[#0a0a0a] border border-[#1a1a1a] text-white placeholder-[#404040] focus:border-[#d4b896] transition-all duration-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] uppercase tracking-[0.2em] text-[#505050] mb-3">Telefon</label>
+                                    <input
+                                        type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleChange}
+                                        placeholder="+46 70 123 45 67"
+                                        className="w-full px-5 py-4 bg-[#0a0a0a] border border-[#1a1a1a] text-white placeholder-[#404040] focus:border-[#d4b896] transition-all duration-500"
+                                    />
+                                </div>
                             </div>
                         </div>
 
                         {/* Disclaimer */}
-                        <div className="bg-[#141414] border border-[#242424] rounded-xl p-6">
-                            <label className="flex items-start gap-4 cursor-pointer">
-                                <input
-                                    type="checkbox"
-                                    name="disclaimerAccepted"
-                                    checked={formData.disclaimerAccepted}
-                                    onChange={handleChange}
-                                    className="mt-1 w-5 h-5 rounded border-[#333] bg-[#0a0a0a] text-[#c9a962] focus:ring-[#c9a962] focus:ring-offset-0"
-                                />
-                                <span className="text-[#a3a3a3] text-sm leading-relaxed">
-                                    <strong className="text-[#ededed]">Important:</strong> I understand that Forgedveloci creates unique interpretations based on my inspiration.
-                                    The final product will be an original Forgedveloci design, not a replica of any referenced wheels.
+                        <motion.div
+                            className="relative bg-[#0a0a0a] border border-[#1a1a1a] p-8"
+                            whileHover={{ borderColor: "rgba(212, 184, 150, 0.1)" }}
+                        >
+                            {/* Corner decorations */}
+                            <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-[#d4b896]/10" />
+                            <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-[#d4b896]/10" />
+
+                            <label className="flex items-start gap-5 cursor-pointer">
+                                <div className="relative mt-1">
+                                    <input
+                                        type="checkbox"
+                                        name="disclaimerAccepted"
+                                        checked={formData.disclaimerAccepted}
+                                        onChange={handleChange}
+                                        className="peer sr-only"
+                                    />
+                                    <div className="w-5 h-5 border border-[#303030] bg-[#050505] peer-checked:border-[#d4b896] peer-checked:bg-[#d4b896]/10 transition-all duration-300" />
+                                    <svg
+                                        className="absolute inset-0 w-5 h-5 text-[#d4b896] opacity-0 peer-checked:opacity-100 transition-opacity duration-300 p-1"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={2}
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <span className="text-[#606060] text-sm leading-relaxed">
+                                    <strong className="text-[#909090]">Viktigt:</strong> Jag förstår att ForgedVeloci skapar unika tolkningar baserade på min inspiration.
+                                    Den slutgiltiga produkten kommer vara en original ForgedVeloci-design, inte en replika av refererade fälgar.
                                 </span>
                             </label>
-                        </div>
+                        </motion.div>
 
                         {/* Submit */}
                         <motion.button
                             type="submit"
                             disabled={!formData.disclaimerAccepted || isSubmitting}
-                            className={`w-full py-4 rounded-full font-semibold text-lg transition-all duration-300 ${formData.disclaimerAccepted
-                                    ? "bg-gradient-to-r from-[#c9a962] to-[#b8944f] text-[#0a0a0a] cursor-pointer"
-                                    : "bg-[#242424] text-[#525252] cursor-not-allowed"
+                            className={`w-full py-5 text-[12px] uppercase tracking-[0.2em] font-medium transition-all duration-500 ${formData.disclaimerAccepted
+                                    ? "btn-premium"
+                                    : "bg-[#151515] text-[#404040] cursor-not-allowed border border-[#1a1a1a]"
                                 }`}
-                            whileHover={formData.disclaimerAccepted ? { scale: 1.02 } : {}}
-                            whileTap={formData.disclaimerAccepted ? { scale: 0.98 } : {}}
+                            whileHover={formData.disclaimerAccepted ? { scale: 1.01 } : {}}
+                            whileTap={formData.disclaimerAccepted ? { scale: 0.99 } : {}}
                         >
                             {isSubmitting ? (
                                 <motion.span
+                                    className="inline-flex items-center gap-3"
                                     animate={{ opacity: [0.5, 1, 0.5] }}
                                     transition={{ duration: 1.5, repeat: Infinity }}
                                 >
-                                    Submitting...
+                                    <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                    Skickar Förfrågan...
                                 </motion.span>
                             ) : (
-                                "Request Engineering Quote"
+                                "Begär Offert"
                             )}
                         </motion.button>
                     </motion.form>

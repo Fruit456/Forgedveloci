@@ -1,56 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 /* ===================================
-   FORGEDVELOCI - ULTRA DARK THEME
-   Premium Automotive E-commerce
+   FORGEDVELOCI - ULTRA PREMIUM THEME
+   "The Billion Dollar Look"
    =================================== */
 
 :root {
-  /* Core Colors - Ultra Dark */
-  --background: #0a0a0a;
-  --background-elevated: #111111;
-  --surface: #141414;
-  --surface-hover: #1a1a1a;
-  
-  /* Carbon Fiber Grays */
-  --carbon-900: #0a0a0a;
-  --carbon-800: #111111;
-  --carbon-700: #1a1a1a;
-  --carbon-600: #242424;
-  --carbon-500: #333333;
-  --carbon-400: #525252;
-  --carbon-300: #737373;
-  --carbon-200: #a3a3a3;
+  /* Deep Luxury Black */
+  --background: #050505;
+  --background-elevated: #0a0a0a;
+  --surface: #0f0f0f;
+  --surface-hover: #151515;
+
+  /* Rich Carbon Fiber */
+  --carbon-950: #030303;
+  --carbon-900: #050505;
+  --carbon-800: #0a0a0a;
+  --carbon-700: #121212;
+  --carbon-600: #1a1a1a;
+  --carbon-500: #262626;
+  --carbon-400: #404040;
+  --carbon-300: #6b6b6b;
+  --carbon-200: #a1a1a1;
   --carbon-100: #d4d4d4;
-  --carbon-50: #f5f5f5;
-  
-  /* Bronze/Gold Accent - Brushed Metal */
-  --bronze-400: #d4a853;
-  --bronze-500: #c9a962;
-  --bronze-600: #b8944f;
-  --bronze-glow: rgba(201, 169, 98, 0.15);
-  
-  /* Text Colors */
-  --foreground: #ededed;
-  --foreground-muted: #a3a3a3;
-  --foreground-subtle: #737373;
+
+  /* Champagne Gold - More Luxurious */
+  --gold-300: #f5e6c8;
+  --gold-400: #e8d4a8;
+  --gold-500: #d4b896;
+  --gold-600: #c4a67c;
+  --gold-700: #a68b5b;
+  --gold-glow: rgba(212, 184, 150, 0.12);
+  --gold-glow-strong: rgba(212, 184, 150, 0.25);
+
+  /* Text Hierarchy */
+  --foreground: #fafafa;
+  --foreground-secondary: #b8b8b8;
+  --foreground-muted: #707070;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-bronze: var(--bronze-500);
-  --color-bronze-glow: var(--bronze-glow);
-  --color-carbon-900: var(--carbon-900);
-  --color-carbon-800: var(--carbon-800);
-  --color-carbon-700: var(--carbon-700);
-  --color-carbon-600: var(--carbon-600);
-  --color-carbon-500: var(--carbon-500);
-  --color-surface: var(--surface);
+  --color-gold: var(--gold-500);
+  --font-display: "Playfair Display", Georgia, serif;
   --font-sans: "Inter", system-ui, sans-serif;
 }
 
-/* Global Reset & Base */
+/* Base */
 * {
   box-sizing: border-box;
 }
@@ -62,21 +60,22 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  letter-spacing: 0.01em;
 }
 
-/* Selection Styling */
+/* Luxury Selection */
 ::selection {
-  background: var(--bronze-500);
+  background: var(--gold-500);
   color: var(--carbon-900);
 }
 
-/* Custom Scrollbar */
+/* Premium Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -85,52 +84,85 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: var(--carbon-600);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--carbon-500);
+  background: var(--gold-700);
 }
 
-/* Input Styling */
-input, textarea {
-  background: var(--surface);
+/* Premium Input Styling */
+input,
+textarea,
+select {
+  background: var(--carbon-800);
   border: 1px solid var(--carbon-600);
   color: var(--foreground);
-  transition: all 0.3s ease;
+  font-family: "Inter", sans-serif;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
-  border-color: var(--bronze-500);
-  box-shadow: 0 0 0 3px var(--bronze-glow);
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 1px var(--gold-glow), 0 0 30px var(--gold-glow);
 }
 
-input::placeholder, textarea::placeholder {
-  color: var(--foreground-subtle);
+input::placeholder,
+textarea::placeholder {
+  color: var(--foreground-muted);
+  font-weight: 300;
 }
 
-/* Typography Utilities */
-.text-gradient-bronze {
-  background: linear-gradient(135deg, var(--bronze-400) 0%, var(--bronze-600) 100%);
+/* Typography Classes */
+.font-display {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--gold-300) 0%, var(--gold-500) 50%, var(--gold-600) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Glow Effects */
-.glow-bronze {
-  box-shadow: 0 0 30px var(--bronze-glow), 0 0 60px var(--bronze-glow);
+.text-gradient-white {
+  background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Glass Effect */
+/* Premium Glow Effects */
+.glow-gold {
+  box-shadow:
+    0 0 20px var(--gold-glow),
+    0 0 40px var(--gold-glow),
+    0 0 80px var(--gold-glow);
+}
+
+.glow-gold-subtle {
+  box-shadow: 0 0 60px var(--gold-glow);
+}
+
+/* Glassmorphism */
 .glass {
-  background: rgba(20, 20, 20, 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
-/* Video Background Container */
+.glass-card {
+  background: linear-gradient(145deg,
+      rgba(15, 15, 15, 0.9) 0%,
+      rgba(10, 10, 10, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Video Hero */
 .video-hero {
   position: fixed;
   top: 0;
@@ -145,7 +177,8 @@ input::placeholder, textarea::placeholder {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.4;
+  opacity: 0.25;
+  filter: contrast(1.1) brightness(0.9);
 }
 
 .video-hero::after {
@@ -155,10 +188,141 @@ input::placeholder, textarea::placeholder {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(10, 10, 10, 0.6) 0%,
-    rgba(10, 10, 10, 0.4) 50%,
-    rgba(10, 10, 10, 0.9) 100%
-  );
+  background:
+    linear-gradient(to bottom, rgba(5, 5, 5, 0.7) 0%, transparent 30%, transparent 60%, rgba(5, 5, 5, 0.95) 100%),
+    radial-gradient(ellipse at center, transparent 0%, rgba(5, 5, 5, 0.4) 100%);
+}
+
+/* Premium Button */
+.btn-premium {
+  background: linear-gradient(135deg, var(--gold-400) 0%, var(--gold-600) 100%);
+  color: var(--carbon-900);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 1rem 2.5rem;
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-premium::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn-premium:hover::before {
+  left: 100%;
+}
+
+.btn-premium:hover {
+  box-shadow: 0 10px 40px var(--gold-glow-strong);
+  transform: translateY(-2px);
+}
+
+/* Elegant Divider */
+.divider-gold {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-600), transparent);
+  opacity: 0.3;
+}
+
+/* Luxury Card Hover */
+.luxury-card {
+  position: relative;
+  background: linear-gradient(145deg, rgba(15, 15, 15, 1) 0%, rgba(8, 8, 8, 1) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.luxury-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, transparent 0%, var(--gold-glow) 100%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.luxury-card:hover {
+  border-color: rgba(212, 184, 150, 0.1);
+  transform: translateY(-8px);
+}
+
+.luxury-card:hover::before {
+  opacity: 1;
+}
+
+/* Animated Underline */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold-500);
+  transition: width 0.4s ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* Number Input */
+.input-luxury {
+  background: rgba(10, 10, 10, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0;
+  font-size: 1.25rem;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.input-luxury:focus {
+  border-color: var(--gold-500);
+  background: rgba(15, 15, 15, 0.9);
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg,
+      var(--carbon-700) 0%,
+      var(--carbon-600) 50%,
+      var(--carbon-700) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+/* Wheel Preview Circle */
+.wheel-preview {
+  background: radial-gradient(circle at 30% 30%, var(--carbon-600) 0%, var(--carbon-900) 70%);
+  border: 3px solid var(--carbon-700);
+  box-shadow:
+    inset 0 0 60px rgba(0, 0, 0, 0.8),
+    0 20px 60px rgba(0, 0, 0, 0.5);
 }

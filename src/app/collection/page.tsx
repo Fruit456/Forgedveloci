@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 
-// Mock product data (would come from Azure SQL via API)
+// Mock product data
 const mockProducts = [
     {
         id: "1",
@@ -13,9 +13,8 @@ const mockProducts = [
         modelCode: "VEL-GT-001",
         diameter: 20,
         width: 10.0,
-        finish: "Brushed Bronze",
+        finish: "Borstad Brons",
         priceSek: 18500,
-        imageUrl: "/wheels/veloce-gt.png",
     },
     {
         id: "2",
@@ -23,9 +22,8 @@ const mockProducts = [
         modelCode: "APX-CB-001",
         diameter: 21,
         width: 11.0,
-        finish: "Satin Black",
+        finish: "Satin Svart",
         priceSek: 24900,
-        imageUrl: "/wheels/apex-carbon.png",
     },
     {
         id: "3",
@@ -33,9 +31,8 @@ const mockProducts = [
         modelCode: "STL-MN-001",
         diameter: 19,
         width: 9.5,
-        finish: "Matte Black",
+        finish: "Matt Svart",
         priceSek: 15900,
-        imageUrl: "/wheels/stealth-mono.png",
     },
     {
         id: "4",
@@ -43,9 +40,8 @@ const mockProducts = [
         modelCode: "REG-001",
         diameter: 20,
         width: 9.0,
-        finish: "Polished Bronze Lip",
+        finish: "Polerad Brons",
         priceSek: 21500,
-        imageUrl: "/wheels/regale.png",
     },
 ];
 
@@ -54,137 +50,205 @@ function CollectionContent() {
     const regNumber = searchParams.get("reg") || "";
     const [isAnalyzing, setIsAnalyzing] = useState(true);
     const [vehicleData, setVehicleData] = useState<{ make: string; model: string; color: string } | null>(null);
+    const [analysisStage, setAnalysisStage] = useState(0);
 
     useEffect(() => {
-        // Simulate AI analysis delay
+        const stages = [
+            "Hämtar fordonsdata...",
+            "Analyserar dimensioner...",
+            "Matchar kompatibla fälgar...",
+            "Kurerar rekommendationer..."
+        ];
+
+        let currentStage = 0;
+        const stageInterval = setInterval(() => {
+            if (currentStage < stages.length - 1) {
+                currentStage++;
+                setAnalysisStage(currentStage);
+            }
+        }, 700);
+
         const timer = setTimeout(() => {
-            // Mock vehicle data based on reg number
             setVehicleData({
                 make: "BMW",
                 model: "M4 Competition",
-                color: "San Marino Blue",
+                color: "San Marino Blå",
             });
             setIsAnalyzing(false);
-        }, 2500);
+        }, 3200);
 
-        return () => clearTimeout(timer);
+        return () => {
+            clearTimeout(timer);
+            clearInterval(stageInterval);
+        };
     }, [regNumber]);
+
+    const analysisStages = [
+        "Hämtar fordonsdata...",
+        "Analyserar dimensioner...",
+        "Matchar kompatibla fälgar...",
+        "Kurerar rekommendationer..."
+    ];
 
     if (isAnalyzing) {
         return (
-            <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center px-6">
+            <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center px-6">
                 <motion.div
-                    className="text-center"
+                    className="text-center max-w-md"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                 >
-                    {/* Analyzing Animation */}
-                    <motion.div
-                        className="w-32 h-32 mx-auto mb-8 border-2 border-[#333] rounded-full relative"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    >
+                    {/* Premium Loading Animation */}
+                    <div className="relative w-40 h-40 mx-auto mb-12">
+                        {/* Outer ring */}
                         <motion.div
-                            className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#c9a962] rounded-full"
-                            animate={{ scale: [1, 1.5, 1] }}
-                            transition={{ duration: 1, repeat: Infinity }}
+                            className="absolute inset-0 border border-[#1a1a1a] rounded-full"
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                         />
-                    </motion.div>
+                        {/* Middle ring */}
+                        <motion.div
+                            className="absolute inset-4 border border-[#d4b896]/20 rounded-full"
+                            animate={{ rotate: -360 }}
+                            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                        />
+                        {/* Inner ring with glow */}
+                        <motion.div
+                            className="absolute inset-8 border-2 border-[#d4b896]/40 rounded-full"
+                            animate={{
+                                scale: [1, 1.05, 1],
+                                opacity: [0.4, 0.8, 0.4]
+                            }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                        />
+                        {/* Center dot */}
+                        <div className="absolute inset-[60px] bg-[#d4b896] rounded-full glow-gold" />
+                    </div>
 
+                    {/* Stage Text */}
                     <motion.p
-                        className="text-[#737373] text-lg mb-2"
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                        key={analysisStage}
+                        className="text-[#606060] text-sm uppercase tracking-[0.2em] mb-6"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
                     >
-                        Analyzing vehicle...
+                        {analysisStages[analysisStage]}
                     </motion.p>
-                    <p className="text-[#c9a962] text-2xl font-bold tracking-wider">{regNumber}</p>
+
+                    {/* Registration Number */}
+                    <p className="font-display text-3xl text-gradient-gold tracking-wider">{regNumber}</p>
                 </motion.div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a]">
+        <div className="min-h-screen bg-[#050505]">
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 px-8 py-6 glass">
-                <nav className="max-w-7xl mx-auto flex items-center justify-between">
-                    <Link href="/" className="text-2xl font-bold tracking-tight">
-                        <span className="text-[#ededed]">FORGED</span>
-                        <span className="text-gradient-bronze">VELOCI</span>
+            <header className="fixed top-0 left-0 right-0 z-50 glass">
+                <nav className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
+                    <Link href="/" className="group">
+                        <span className="font-display text-2xl tracking-wide text-white">Forged</span>
+                        <span className="font-display text-2xl tracking-wide text-gradient-gold">Veloci</span>
                     </Link>
                     <Link
                         href="/"
-                        className="text-sm text-[#a3a3a3] hover:text-[#ededed] transition-colors"
+                        className="text-[12px] uppercase tracking-[0.15em] text-[#606060] hover:text-[#d4b896] transition-colors duration-500"
                     >
-                        New Search
+                        Ny Sökning
                     </Link>
                 </nav>
             </header>
 
-            <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
+            <main className="pt-40 pb-24 px-6 max-w-7xl mx-auto">
                 {/* Vehicle Info */}
                 <motion.div
-                    className="text-center mb-16"
-                    initial={{ opacity: 0, y: 20 }}
+                    className="text-center mb-20"
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
                 >
-                    <p className="text-[#737373] text-sm uppercase tracking-[0.2em] mb-3">Curated For</p>
-                    <h1 className="text-4xl md:text-5xl font-bold text-[#ededed] mb-2">
+                    <p className="text-[11px] uppercase tracking-[0.4em] text-[#505050] mb-4">Kurerat För</p>
+                    <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-white mb-3">
                         {vehicleData?.make} {vehicleData?.model}
                     </h1>
-                    <p className="text-[#c9a962] text-lg">{vehicleData?.color}</p>
+                    <p className="text-[#d4b896] text-lg font-light">{vehicleData?.color}</p>
+
+                    {/* Decorative line */}
+                    <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#d4b896]/30 to-transparent mx-auto mt-8" />
                 </motion.div>
 
                 {/* Product Grid */}
                 <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
                     initial="hidden"
                     animate="visible"
                     variants={{
                         visible: {
-                            transition: { staggerChildren: 0.15 }
+                            transition: { staggerChildren: 0.12 }
                         }
                     }}
                 >
-                    {mockProducts.map((product) => (
+                    {mockProducts.map((product, index) => (
                         <motion.div
                             key={product.id}
-                            className="group bg-[#141414] rounded-2xl overflow-hidden border border-[#242424] hover:border-[#c9a962]/30 transition-all duration-500"
+                            className="luxury-card group overflow-hidden"
                             variants={{
-                                hidden: { opacity: 0, y: 30 },
-                                visible: { opacity: 1, y: 0 }
+                                hidden: { opacity: 0, y: 40 },
+                                visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
                             }}
-                            whileHover={{ y: -5 }}
                         >
-                            {/* Product Image */}
-                            <div className="aspect-square bg-[#111] relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#c9a962]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                {/* Placeholder for wheel image */}
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="w-3/4 h-3/4 rounded-full border-4 border-[#333] bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center">
-                                        <div className="w-1/3 h-1/3 rounded-full bg-[#0a0a0a] border-2 border-[#333]" />
+                            {/* Product Image Area */}
+                            <div className="aspect-square relative overflow-hidden bg-[#080808]">
+                                {/* Subtle gradient overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#d4b896]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+                                {/* Wheel placeholder */}
+                                <div className="absolute inset-8 flex items-center justify-center">
+                                    <div className="wheel-preview w-full h-full rounded-full flex items-center justify-center">
+                                        {/* Spokes simulation */}
+                                        <div className="relative w-full h-full">
+                                            {[...Array(5)].map((_, i) => (
+                                                <div
+                                                    key={i}
+                                                    className="absolute top-1/2 left-1/2 w-1/2 h-0.5 bg-gradient-to-r from-[#1a1a1a] to-transparent origin-left"
+                                                    style={{ transform: `rotate(${i * 72}deg)` }}
+                                                />
+                                            ))}
+                                            {/* Center cap */}
+                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 h-1/4 rounded-full bg-[#0a0a0a] border border-[#252525]" />
+                                        </div>
                                     </div>
+                                </div>
+
+                                {/* Number badge */}
+                                <div className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.15em] text-[#404040]">
+                                    0{index + 1}
                                 </div>
                             </div>
 
                             {/* Product Info */}
-                            <div className="p-6">
-                                <p className="text-[#737373] text-xs uppercase tracking-wider mb-1">{product.finish}</p>
-                                <h3 className="text-[#ededed] text-xl font-semibold mb-2">{product.name}</h3>
-                                <p className="text-[#525252] text-sm mb-4">
+                            <div className="p-6 relative z-10">
+                                <p className="text-[10px] uppercase tracking-[0.2em] text-[#d4b896]/60 mb-2">{product.finish}</p>
+                                <h3 className="font-display text-xl text-white mb-1">{product.name}</h3>
+                                <p className="text-[#404040] text-xs mb-6">
                                     {product.diameter}" × {product.width}"
                                 </p>
-                                <div className="flex items-center justify-between">
-                                    <p className="text-[#c9a962] text-lg font-bold">
-                                        {product.priceSek.toLocaleString("sv-SE")} SEK
-                                    </p>
+
+                                <div className="flex items-end justify-between">
+                                    <div>
+                                        <p className="text-[10px] uppercase tracking-[0.15em] text-[#404040] mb-1">Per Fälg</p>
+                                        <p className="font-display text-xl text-gradient-gold">
+                                            {product.priceSek.toLocaleString("sv-SE")} <span className="text-sm">SEK</span>
+                                        </p>
+                                    </div>
                                     <motion.button
-                                        className="px-4 py-2 text-xs uppercase tracking-wider border border-[#333] rounded-full text-[#a3a3a3] hover:border-[#c9a962] hover:text-[#c9a962] transition-all duration-300"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
+                                        className="px-5 py-2.5 text-[10px] uppercase tracking-[0.15em] border border-[#252525] text-[#707070] hover:border-[#d4b896] hover:text-[#d4b896] transition-all duration-500"
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
                                     >
-                                        View
+                                        Visa
                                     </motion.button>
                                 </div>
                             </div>
@@ -194,19 +258,19 @@ function CollectionContent() {
 
                 {/* CTA Section */}
                 <motion.div
-                    className="text-center mt-20 pt-12 border-t border-[#1a1a1a]"
+                    className="text-center mt-24 pt-16 border-t border-[#151515]"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
+                    transition={{ delay: 0.8 }}
                 >
-                    <p className="text-[#737373] mb-4">Don&apos;t see what you&apos;re looking for?</p>
+                    <p className="text-[#505050] text-sm mb-6">Hittar du inte det du söker?</p>
                     <Link href="/bespoke">
                         <motion.button
-                            className="px-8 py-4 bg-gradient-to-r from-[#c9a962] to-[#b8944f] text-[#0a0a0a] font-semibold rounded-full"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            className="btn-premium"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                         >
-                            Enter Bespoke Studio
+                            Besök Ateljén
                         </motion.button>
                     </Link>
                 </motion.div>
@@ -217,7 +281,7 @@ function CollectionContent() {
 
 export default function CollectionPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a]" />}>
+        <Suspense fallback={<div className="min-h-screen bg-[#050505]" />}>
             <CollectionContent />
         </Suspense>
     );
