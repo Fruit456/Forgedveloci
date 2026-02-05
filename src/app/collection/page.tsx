@@ -1,279 +1,203 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
-// Mock product data
-const mockProducts = [
+// Architecture Collections
+const COLLECTIONS = [
     {
-        id: "1",
-        name: "Veloce GT",
-        modelCode: "VEL-GT-001",
-        diameter: 20,
-        width: 10.0,
-        finish: "Borstad Brons",
-        priceSek: 18500,
+        id: "MONOBLOCK",
+        name: "Monoblock",
+        tagline: "Pure Performance",
+        description: "Smidd i ett enda stycke. Den ultimata balansen mellan vikt och styrka.",
+        startPrice: 3850,
+        image: "/wheel_monoblock_v2.png",
+        specs: ["Flow Formed", "Lättvikt", "Street/Track"]
     },
     {
-        id: "2",
-        name: "Apex Carbon",
-        modelCode: "APX-CB-001",
-        diameter: 21,
-        width: 11.0,
-        finish: "Satin Svart",
-        priceSek: 24900,
+        id: "TWOPIECE",
+        name: "2-Piece",
+        tagline: "Infinite Possibilities",
+        description: "Tvådelad konstruktion för maximal anpassning av offset och djup.",
+        startPrice: 4800,
+        image: "/wheel_twopiece_v2.png",
+        specs: ["Deep Dish", "Modular", "Custom Offset"]
     },
     {
-        id: "3",
-        name: "Stealth Mono",
-        modelCode: "STL-MN-001",
-        diameter: 19,
-        width: 9.5,
-        finish: "Matt Svart",
-        priceSek: 15900,
+        id: "BEADLOCK",
+        name: "Beadlock",
+        tagline: "Off-Road Ready",
+        description: "Säkrad däckmontering för extrema förhållanden och låga lufttryck.",
+        startPrice: 4800,
+        image: "/wheel_beadlock_v2.png", // Using placeholder until beadlock image is ready
+        specs: ["True Beadlock", "Off-Road", "Heavy Duty"]
     },
     {
-        id: "4",
-        name: "Regale",
-        modelCode: "REG-001",
-        diameter: 20,
-        width: 9.0,
-        finish: "Polerad Brons",
-        priceSek: 21500,
-    },
+        id: "AERODISC",
+        name: "Aerodisc",
+        tagline: "The Future",
+        description: "Aerodynamisk effektivitet möter hypercar-estetik.",
+        startPrice: 10850,
+        image: "/wheel_aerodisc_v2.png",
+        specs: ["Aero", "Carbon Look", "High Speed"]
+    }
 ];
 
 function CollectionContent() {
     const searchParams = useSearchParams();
-    const regNumber = searchParams.get("reg") || "";
-    const [isAnalyzing, setIsAnalyzing] = useState(true);
-    const [vehicleData, setVehicleData] = useState<{ make: string; model: string; color: string } | null>(null);
-    const [analysisStage, setAnalysisStage] = useState(0);
+    const router = useRouter();
+    const regNumber = searchParams.get("reg");
+    const [hovered, setHovered] = useState<string | null>(null);
 
-    useEffect(() => {
-        const stages = [
-            "Hämtar fordonsdata...",
-            "Analyserar dimensioner...",
-            "Matchar kompatibla fälgar...",
-            "Kurerar rekommendationer..."
-        ];
-
-        let currentStage = 0;
-        const stageInterval = setInterval(() => {
-            if (currentStage < stages.length - 1) {
-                currentStage++;
-                setAnalysisStage(currentStage);
-            }
-        }, 700);
-
-        const timer = setTimeout(() => {
-            setVehicleData({
-                make: "BMW",
-                model: "M4 Competition",
-                color: "San Marino Blå",
-            });
-            setIsAnalyzing(false);
-        }, 3200);
-
-        return () => {
-            clearTimeout(timer);
-            clearInterval(stageInterval);
-        };
-    }, [regNumber]);
-
-    const analysisStages = [
-        "Hämtar fordonsdata...",
-        "Analyserar dimensioner...",
-        "Matchar kompatibla fälgar...",
-        "Kurerar rekommendationer..."
-    ];
-
-    if (isAnalyzing) {
-        return (
-            <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center px-6">
-                <motion.div
-                    className="text-center max-w-md"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                >
-                    {/* Premium Loading Animation */}
-                    <div className="relative w-40 h-40 mx-auto mb-12">
-                        {/* Outer ring */}
-                        <motion.div
-                            className="absolute inset-0 border border-[#1a1a1a] rounded-full"
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                        />
-                        {/* Middle ring */}
-                        <motion.div
-                            className="absolute inset-4 border border-[#d4b896]/20 rounded-full"
-                            animate={{ rotate: -360 }}
-                            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                        />
-                        {/* Inner ring with glow */}
-                        <motion.div
-                            className="absolute inset-8 border-2 border-[#d4b896]/40 rounded-full"
-                            animate={{
-                                scale: [1, 1.05, 1],
-                                opacity: [0.4, 0.8, 0.4]
-                            }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                        />
-                        {/* Center dot */}
-                        <div className="absolute inset-[60px] bg-[#d4b896] rounded-full glow-gold" />
-                    </div>
-
-                    {/* Stage Text */}
-                    <motion.p
-                        key={analysisStage}
-                        className="text-[#606060] text-sm uppercase tracking-[0.2em] mb-6"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                    >
-                        {analysisStages[analysisStage]}
-                    </motion.p>
-
-                    {/* Registration Number */}
-                    <p className="font-display text-3xl text-gradient-gold tracking-wider">{regNumber}</p>
-                </motion.div>
-            </div>
-        );
-    }
+    const handleConfigure = (archId: string) => {
+        // Here we could pass the architecture as a query param if we wanted to pre-select it in Bespoke
+        // For now, just taking them to the start of the journey
+        // In a real app: router.push(`/bespoke?arch=${archId}`);
+        router.push('/bespoke');
+    };
 
     return (
-        <div className="min-h-screen bg-[#050505]">
+        <div className="min-h-screen bg-[#050505] text-white selection:bg-[#C8AA6E] selection:text-black">
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 glass">
-                <nav className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
-                    <Link href="/" className="group">
-                        <span className="font-display text-2xl tracking-wide text-white">Forged</span>
-                        <span className="font-display text-2xl tracking-wide text-gradient-gold">Veloci</span>
+            <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference pointer-events-none">
+                <nav className="max-w-[1800px] mx-auto px-8 py-8 flex items-center justify-between pointer-events-auto">
+                    <Link href="/" className="text-xl tracking-[0.2em] font-display hover:text-[#C8AA6E] transition-colors">
+                        FORGED<span className="text-[#C8AA6E]">VELOCI</span>
                     </Link>
-                    <Link
-                        href="/"
-                        className="text-[12px] uppercase tracking-[0.15em] text-[#606060] hover:text-[#d4b896] transition-colors duration-500"
-                    >
-                        Ny Sökning
-                    </Link>
+                    <div className="hidden md:flex items-center gap-8">
+                        <Link href="/about" className="text-xs uppercase tracking-widest hover:text-[#C8AA6E] transition-colors text-white/60">
+                            Om Oss
+                        </Link>
+                        <Link href="/contact" className="text-xs uppercase tracking-widest hover:text-[#C8AA6E] transition-colors text-white/60">
+                            Kontakt
+                        </Link>
+                        <Link
+                            href="/bespoke"
+                            className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-[#C8AA6E] transition-colors"
+                        >
+                            <span className="w-2 h-2 bg-[#C8AA6E] rounded-full animate-pulse" />
+                            Atelier Open
+                        </Link>
+                    </div>
                 </nav>
             </header>
 
-            <main className="pt-40 pb-24 px-6 max-w-7xl mx-auto">
-                {/* Vehicle Info */}
-                <motion.div
-                    className="text-center mb-20"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                >
-                    <p className="text-[11px] uppercase tracking-[0.4em] text-[#505050] mb-4">Kurerat För</p>
-                    <h1 className="font-display text-4xl md:text-5xl lg:text-6xl text-white mb-3">
-                        {vehicleData?.make} {vehicleData?.model}
-                    </h1>
-                    <p className="text-[#d4b896] text-lg font-light">{vehicleData?.color}</p>
+            <main className="pt-32 pb-20 px-8">
+                <div className="max-w-[1800px] mx-auto">
 
-                    {/* Decorative line */}
-                    <div className="w-24 h-px bg-gradient-to-r from-transparent via-[#d4b896]/30 to-transparent mx-auto mt-8" />
-                </motion.div>
-
-                {/* Product Grid */}
-                <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-                    initial="hidden"
-                    animate="visible"
-                    variants={{
-                        visible: {
-                            transition: { staggerChildren: 0.12 }
-                        }
-                    }}
-                >
-                    {mockProducts.map((product, index) => (
-                        <motion.div
-                            key={product.id}
-                            className="luxury-card group overflow-hidden"
-                            variants={{
-                                hidden: { opacity: 0, y: 40 },
-                                visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-                            }}
+                    {/* Hero Text */}
+                    <div className="mb-24">
+                        <motion.span
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-[#C8AA6E] text-xs uppercase tracking-[0.4em] block mb-4"
                         >
-                            {/* Product Image Area */}
-                            <div className="aspect-square relative overflow-hidden bg-[#080808]">
-                                {/* Subtle gradient overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#d4b896]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            The Collection
+                        </motion.span>
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="text-5xl md:text-8xl font-display uppercase max-w-4xl leading-[0.9]"
+                        >
+                            Engineered for <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/20">Perfection</span>
+                        </motion.h1>
 
-                                {/* Wheel placeholder */}
-                                <div className="absolute inset-8 flex items-center justify-center">
-                                    <div className="wheel-preview w-full h-full rounded-full flex items-center justify-center">
-                                        {/* Spokes simulation */}
-                                        <div className="relative w-full h-full">
-                                            {[...Array(5)].map((_, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="absolute top-1/2 left-1/2 w-1/2 h-0.5 bg-gradient-to-r from-[#1a1a1a] to-transparent origin-left"
-                                                    style={{ transform: `rotate(${i * 72}deg)` }}
-                                                />
-                                            ))}
-                                            {/* Center cap */}
-                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/4 h-1/4 rounded-full bg-[#0a0a0a] border border-[#252525]" />
+                        {regNumber && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.3 }}
+                                className="mt-8 flex items-center gap-4 text-white/40"
+                            >
+                                <span className="text-sm uppercase tracking-widest">Kurerat för</span>
+                                <span className="px-3 py-1 border border-white/20 text-white font-display tracking-wider">
+                                    {regNumber}
+                                </span>
+                            </motion.div>
+                        )}
+                    </div>
+
+                    {/* Collection Grid */}
+                    <div className="grid md:grid-cols-2 gap-1">
+                        {COLLECTIONS.map((item, index) => (
+                            <motion.div
+                                key={item.id}
+                                initial={{ opacity: 0, y: 50 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                onMouseEnter={() => setHovered(item.id)}
+                                onMouseLeave={() => setHovered(null)}
+                                className="group relative aspect-[4/3] md:aspect-[16/9] border border-white/5 bg-black overflow-hidden cursor-pointer"
+                                onClick={() => handleConfigure(item.id)}
+                            >
+                                {/* Image Background */}
+                                <div className="absolute inset-0 transition-transform duration-1000 group-hover:scale-105">
+                                    <Image
+                                        src={item.image}
+                                        alt={item.name}
+                                        fill
+                                        className="object-contain p-4 md:p-8 opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+                                    />
+                                </div>
+
+                                {/* Gradient Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+                                {/* Content */}
+                                <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end items-start">
+                                    <div className="transform transition-transform duration-500 group-hover:-translate-y-4">
+                                        <span className="text-[#C8AA6E] text-xs uppercase tracking-widest mb-2 block font-bold">
+                                            {item.tagline}
+                                        </span>
+                                        <h2 className="text-4xl md:text-6xl font-display uppercase mb-4 text-white">
+                                            {item.name}
+                                        </h2>
+                                        <p className="text-white/60 max-w-md text-sm leading-relaxed mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 hidden md:block">
+                                            {item.description}
+                                        </p>
+
+                                        <div className="flex items-center gap-6">
+                                            <span className="text-white font-bold text-lg">
+                                                Från {item.startPrice.toLocaleString('sv-SE')} kr
+                                            </span>
+                                            <span className="flex items-center gap-2 text-[#C8AA6E] text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity delay-200">
+                                                Konfigurera
+                                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                                </svg>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Number badge */}
-                                <div className="absolute top-4 left-4 text-[10px] uppercase tracking-[0.15em] text-[#404040]">
+                                {/* Index Number */}
+                                <div className="absolute top-8 right-8 text-white/10 font-display text-4xl hidden md:block">
                                     0{index + 1}
                                 </div>
-                            </div>
+                            </motion.div>
+                        ))}
+                    </div>
 
-                            {/* Product Info */}
-                            <div className="p-6 relative z-10">
-                                <p className="text-[10px] uppercase tracking-[0.2em] text-[#d4b896]/60 mb-2">{product.finish}</p>
-                                <h3 className="font-display text-xl text-white mb-1">{product.name}</h3>
-                                <p className="text-[#404040] text-xs mb-6">
-                                    {product.diameter}" × {product.width}"
-                                </p>
-
-                                <div className="flex items-end justify-between">
-                                    <div>
-                                        <p className="text-[10px] uppercase tracking-[0.15em] text-[#404040] mb-1">Per Fälg</p>
-                                        <p className="font-display text-xl text-gradient-gold">
-                                            {product.priceSek.toLocaleString("sv-SE")} <span className="text-sm">SEK</span>
-                                        </p>
-                                    </div>
-                                    <motion.button
-                                        className="px-5 py-2.5 text-[10px] uppercase tracking-[0.15em] border border-[#252525] text-[#707070] hover:border-[#d4b896] hover:text-[#d4b896] transition-all duration-500"
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                    >
-                                        Visa
-                                    </motion.button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))}
-                </motion.div>
-
-                {/* CTA Section */}
-                <motion.div
-                    className="text-center mt-24 pt-16 border-t border-[#151515]"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                >
-                    <p className="text-[#505050] text-sm mb-6">Hittar du inte det du söker?</p>
-                    <Link href="/bespoke">
-                        <motion.button
-                            className="btn-premium"
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                    {/* Footer / CTA */}
+                    <div className="mt-32 text-center border-t border-white/10 pt-20">
+                        <h3 className="text-2xl font-display uppercase mb-6">Skapa ditt mästerverk</h3>
+                        <p className="text-white/50 mb-8 max-w-lg mx-auto">
+                            Varje uppsättning tillverkas på beställning efter dina exakta specifikationer.
+                        </p>
+                        <Link
+                            href="/bespoke"
+                            className="inline-block px-12 py-4 bg-[#C8AA6E] text-black font-bold uppercase tracking-widest hover:bg-white transition-colors"
                         >
-                            Besök Ateljén
-                        </motion.button>
-                    </Link>
-                </motion.div>
+                            Starta Konfigurator
+                        </Link>
+                    </div>
+
+                </div>
             </main>
         </div>
     );

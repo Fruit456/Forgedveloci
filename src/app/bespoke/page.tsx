@@ -34,7 +34,7 @@ const ARCHITECTURES = [
         description: "Smidd i ett enda stycke från flygplansaluminium 6061-T6. Maximal styvhet, minimal vikt.",
         specs: ["Vikt från 8.2kg", "Max last 900kg", "Flow-formed"],
         image: "/wheel_monoblock_v2.png",
-        price: "XX XXX" // TODO: Lägg in pris
+        startPrice: 3850
     },
     {
         id: "TWOPIECE",
@@ -43,7 +43,16 @@ const ARCHITECTURES = [
         description: "Split-rim konstruktion med synliga titanium-bultar. Djup dish och oändliga anpassningsmöjligheter.",
         specs: ["Anpassad offset", "Deep dish", "Polerad läpp"],
         image: "/wheel_twopiece_v2.png",
-        price: "XX XXX" // TODO: Lägg in pris
+        startPrice: 4800
+    },
+    {
+        id: "BEADLOCK",
+        name: "Beadlock",
+        tagline: "Off-Road Ready",
+        description: "Beadlock-ring för extrema förhållanden. Säkrar däcket vid lågt lufttryck för offroad och racing.",
+        specs: ["True beadlock", "Racing-spec", "Lågtryckskapabel"],
+        image: "/wheel_beadlock_v2.png",
+        startPrice: 4800
     },
     {
         id: "AERODISC",
@@ -52,7 +61,8 @@ const ARCHITECTURES = [
         description: "Aerodynamisk disc-design för ultimat prestanda. Kolfiber-ytbehandling, hypercar-estetik.",
         specs: ["Aero-optimerad", "Kolfiber", "Hypercar-stil"],
         image: "/wheel_aerodisc_v2.png",
-        price: "XX XXX" // TODO: Lägg in pris
+        startPrice: 10850, // Monoblock base + 7000kr aerodisc
+        isAerodisc: true
     }
 ];
 
@@ -60,22 +70,72 @@ const FINISHES = [
     // Standard lack - Ingen extra kostnad (12 vanliga färger)
     { id: "GLOSS_BLACK", name: "Gloss Svart", hex: "#0a0a0a", type: "Standard", price: 0 },
     { id: "SATIN_BLACK", name: "Satin Svart", hex: "#1a1a1a", type: "Standard", price: 0 },
-    { id: "GLOSS_GUNMETAL", name: "Gunmetal", hex: "#2d2d2d", type: "Standard", price: 0 },
-    { id: "GLOSS_ANTHRACITE", name: "Anthracite", hex: "#383838", type: "Standard", price: 0 },
-    { id: "GLOSS_SILVER", name: "Silver", hex: "#c0c0c0", type: "Standard", price: 0 },
-    { id: "GLOSS_WHITE", name: "Vit", hex: "#f5f5f5", type: "Standard", price: 0 },
-    { id: "GLOSS_BRONZE", name: "Bronze", hex: "#cd7f32", type: "Standard", price: 0 },
-    { id: "GLOSS_GOLD", name: "Guld", hex: "#d4af37", type: "Standard", price: 0 },
-    { id: "GLOSS_RED", name: "Röd", hex: "#8b0000", type: "Standard", price: 0 },
-    { id: "GLOSS_BLUE", name: "Blå", hex: "#1a3a5c", type: "Standard", price: 0 },
-    { id: "GLOSS_GREEN", name: "British Racing Green", hex: "#004225", type: "Standard", price: 0 },
-    { id: "GLOSS_PURPLE", name: "Midnight Purple", hex: "#1e0033", type: "Standard", price: 0 },
-    // Premium finish - +2000kr (endast Borstad och Polerad)
-    { id: "BRUSHED", name: "Borstad", hex: "#8a8a8a", type: "Premium", price: 2000 },
+    { id: "GUNMETAL", name: "Gunmetal", hex: "#3d3d3d", type: "Standard", price: 0 },
+    { id: "ANTHRACITE", name: "Anthracite", hex: "#2b2b2b", type: "Standard", price: 0 },
+    { id: "SILVER", name: "Silver", hex: "#c0c0c0", type: "Standard", price: 0 },
+    { id: "WHITE", name: "Vit", hex: "#f5f5f5", type: "Standard", price: 0 },
+    { id: "BRONZE", name: "Bronze", hex: "#8B6914", type: "Standard", price: 0 },
+    { id: "GOLD", name: "Guld", hex: "#D4AF37", type: "Standard", price: 0 },
+    { id: "RED", name: "Röd", hex: "#8B0000", type: "Standard", price: 0 },
+    { id: "BLUE", name: "Blå", hex: "#1a237e", type: "Standard", price: 0 },
+    { id: "BRITISH_GREEN", name: "British Racing Green", hex: "#004225", type: "Standard", price: 0 },
+    { id: "PURPLE", name: "Midnight Purple", hex: "#2E1A47", type: "Standard", price: 0 },
+    // Premium finishes
+    { id: "BRUSHED", name: "Borstad", hex: "#a8a8a8", type: "Premium", price: 2000 },
     { id: "POLISHED", name: "Polerad", hex: "#e8e8e8", type: "Premium", price: 2000 },
 ];
 
-const DIAMETERS = [16, 17, 18, 19, 20, 21, 22, 23, 24];
+// Pris per fälg baserat på diameter och arkitektur
+const MONOBLOCK_PRICES: { [key: number]: number } = {
+    17: 3850,
+    18: 4050,
+    19: 4690,
+    20: 4870,
+    21: 4990,
+    22: 5230,
+    23: 5670,
+    24: 6075
+};
+
+const TWOPIECE_PRICES: { [key: number]: number } = {
+    18: 4800,
+    19: 4999,
+    20: 5349,
+    21: 5599,
+    22: 5899,
+    23: 6120,
+    24: 6349
+};
+
+// Aerodisc = Monoblock pris + 7000kr per fälg
+const AERODISC_SURCHARGE = 7000;
+
+// Beadlock = samma pris som 2-piece
+const BEADLOCK_PRICES = TWOPIECE_PRICES;
+
+// Get price based on architecture and diameter
+function getWheelPrice(architecture: string, diameter: number): number {
+    switch (architecture) {
+        case "MONOBLOCK":
+            return MONOBLOCK_PRICES[diameter] || 0;
+        case "TWOPIECE":
+        case "BEADLOCK":
+            return TWOPIECE_PRICES[diameter] || 0;
+        case "AERODISC":
+            return (MONOBLOCK_PRICES[diameter] || 0) + AERODISC_SURCHARGE;
+        default:
+            return MONOBLOCK_PRICES[diameter] || 0;
+    }
+}
+
+// Get available diameters for architecture
+function getAvailableDiameters(architecture: string): number[] {
+    if (architecture === "TWOPIECE" || architecture === "BEADLOCK") {
+        return [18, 19, 20, 21, 22, 23, 24]; // No 17" for 2-piece/beadlock
+    }
+    return [17, 18, 19, 20, 21, 22, 23, 24];
+}
+
 const WIDTHS = [8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5, 12.0];
 
 // ============================================================================
@@ -107,11 +167,14 @@ export default function BespokeAtelier() {
     const handleVehicleSearch = async () => {
         if (!regInput || regInput.length < 3) return;
         setIsSearching(true);
-        await new Promise(r => setTimeout(r, 1500));
+        // Simulate brief validation
+        await new Promise(r => setTimeout(r, 600));
+
+        // We just store the reg number as "verified" without external data
         setVehicle({
-            make: "PORSCHE",
-            model: "911 GT3 RS",
-            year: "2024"
+            make: "Fordon",
+            model: "Registrerat",
+            year: ""
         });
         setIsSearching(false);
     };
@@ -237,6 +300,7 @@ export default function BespokeAtelier() {
                     {/* PHASE: DIMENSIONS */}
                     {phase === "dimensions" && (
                         <DimensionsPhase
+                            architecture={config.architecture}
                             frontSize={config.frontSize}
                             rearSize={config.rearSize}
                             onSelect={(front, rear) => {
@@ -477,9 +541,9 @@ function VehiclePhase({
                                 </button>
                             </div>
                             <div className="text-3xl font-display uppercase mb-2">
-                                {vehicle.make} {vehicle.model}
+                                {regInput}
                             </div>
-                            <div className="text-white/50">{vehicle.year}</div>
+                            <div className="text-white/50">Fordonsdata hanteras manuellt</div>
 
                             <button
                                 onClick={onNext}
@@ -514,7 +578,7 @@ function ArchitecturePhase({
             exit={{ opacity: 0, x: -100 }}
             className="min-h-screen flex flex-col px-8 py-32"
         >
-            <div className="max-w-7xl mx-auto w-full">
+            <div className="max-w-[1800px] mx-auto w-full">
                 <button
                     onClick={onBack}
                     className="flex items-center gap-2 text-white/40 hover:text-white text-sm uppercase tracking-widest mb-12 transition-colors"
@@ -531,7 +595,7 @@ function ArchitecturePhase({
                     Välj konstruktionen som definierar din hjuluppsättning.
                 </p>
 
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-4 gap-4">
                     {ARCHITECTURES.map((arch, i) => (
                         <motion.button
                             key={arch.id}
@@ -541,59 +605,44 @@ function ArchitecturePhase({
                             onClick={() => onSelect(arch.id)}
                             onMouseEnter={() => setHovered(arch.id)}
                             onMouseLeave={() => setHovered(null)}
-                            className={`group relative aspect-[3/4] overflow-hidden border transition-all duration-500 text-left ${hovered === arch.id ? "border-[#C8AA6E]" : "border-white/10"
+                            className={`group relative h-full flex flex-col border transition-all duration-500 text-left bg-zinc-900/50 ${hovered === arch.id ? "border-[#C8AA6E]" : "border-white/10"
                                 }`}
                         >
-                            {/* Background Image */}
-                            <div className="absolute inset-0">
+                            {/* Image Section (Top 50%) */}
+                            <div className="relative h-[340px] w-full overflow-hidden border-b border-white/5 bg-black">
                                 <Image
                                     src={arch.image}
                                     alt={arch.name}
                                     fill
-                                    className="object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                                    className="object-contain group-hover:scale-105 transition-all duration-700"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                             </div>
 
-                            {/* Content */}
-                            <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                                <span className="text-[#C8AA6E] text-xs uppercase tracking-widest mb-2">
+                            {/* Content Section (Bottom) */}
+                            <div className="p-8 flex flex-col flex-1">
+                                <span className="text-[#C8AA6E] text-xs uppercase tracking-widest mb-3 font-bold">
                                     {arch.tagline}
                                 </span>
-                                <h3 className="text-3xl font-display uppercase mb-3 group-hover:text-[#C8AA6E] transition-colors">
+                                <h3 className="text-3xl font-display uppercase mb-4 text-white">
                                     {arch.name}
                                 </h3>
-                                <p className="text-white/60 text-sm mb-4 leading-relaxed">
+                                <div className="text-[#C8AA6E] text-xl font-bold mb-4">
+                                    Från {arch.startPrice.toLocaleString('sv-SE')} kr
+                                </div>
+                                <p className="text-white/40 text-sm mb-8 leading-relaxed flex-1">
                                     {arch.description}
                                 </p>
 
-                                {/* Price */}
-                                <div className="text-[#C8AA6E] text-lg font-bold mb-4">
-                                    Från {arch.price} kr
-                                </div>
-
-                                <div className="flex flex-wrap gap-2">
-                                    {arch.specs.map((spec) => (
+                                <div className="flex flex-wrap gap-2 mt-auto">
+                                    {arch.specs.slice(0, 3).map((spec) => (
                                         <span
                                             key={spec}
-                                            className="text-[10px] uppercase tracking-wider px-2 py-1 border border-white/20 text-white/60"
+                                            className="text-[10px] uppercase tracking-wider px-3 py-1.5 border border-white/10 text-white/50 rounded-sm"
                                         >
                                             {spec}
                                         </span>
                                     ))}
                                 </div>
-
-                                {/* Hover CTA */}
-                                <motion.div
-                                    className="mt-6 flex items-center gap-2 text-[#C8AA6E] text-sm uppercase tracking-widest"
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: hovered === arch.id ? 1 : 0, x: hovered === arch.id ? 0 : -10 }}
-                                >
-                                    Välj {arch.name}
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                    </svg>
-                                </motion.div>
                             </div>
                         </motion.button>
                     ))}
@@ -732,22 +781,32 @@ function SurfacePhase({
 }
 
 function DimensionsPhase({
+    architecture,
     frontSize,
     rearSize,
     onSelect,
     onNext,
     onBack
 }: {
+    architecture: string | null;
     frontSize: string | null;
     rearSize: string | null;
     onSelect: (front: string, rear: string) => void;
     onNext: () => void;
     onBack: () => void;
 }) {
-    const [frontDiameter, setFrontDiameter] = useState(20);
+    const arch = architecture || "MONOBLOCK";
+    const availableDiameters = getAvailableDiameters(arch);
+    const defaultDiameter = availableDiameters.includes(20) ? 20 : availableDiameters[0];
+
+    const [frontDiameter, setFrontDiameter] = useState(defaultDiameter);
     const [frontWidth, setFrontWidth] = useState(9.0);
-    const [rearDiameter, setRearDiameter] = useState(20);
+    const [rearDiameter, setRearDiameter] = useState(defaultDiameter);
     const [rearWidth, setRearWidth] = useState(10.0);
+
+    const frontPrice = getWheelPrice(arch, frontDiameter);
+    const rearPrice = getWheelPrice(arch, rearDiameter);
+    const totalPrice = (frontPrice * 2) + (rearPrice * 2);
 
     const handleContinue = () => {
         const front = `${frontDiameter}×${frontWidth}`;
@@ -790,7 +849,7 @@ function DimensionsPhase({
                         </h3>
                         <div className="flex items-center justify-center gap-4">
                             <WheelPicker
-                                values={DIAMETERS}
+                                values={availableDiameters}
                                 selected={frontDiameter}
                                 onSelect={setFrontDiameter}
                                 suffix='"'
@@ -807,6 +866,9 @@ function DimensionsPhase({
                         </div>
                         <div className="mt-6 text-center">
                             <span className="text-[#C8AA6E] text-2xl font-display">{frontDiameter}×{frontWidth}</span>
+                            <div className="text-white/50 text-sm mt-1">
+                                {frontPrice.toLocaleString('sv-SE')} kr/st
+                            </div>
                         </div>
                     </div>
 
@@ -818,7 +880,7 @@ function DimensionsPhase({
                         </h3>
                         <div className="flex items-center justify-center gap-4">
                             <WheelPicker
-                                values={DIAMETERS}
+                                values={availableDiameters}
                                 selected={rearDiameter}
                                 onSelect={setRearDiameter}
                                 suffix='"'
@@ -835,13 +897,43 @@ function DimensionsPhase({
                         </div>
                         <div className="mt-6 text-center">
                             <span className="text-[#C8AA6E] text-2xl font-display">{rearDiameter}×{rearWidth}</span>
+                            <div className="text-white/50 text-sm mt-1">
+                                {rearPrice.toLocaleString('sv-SE')} kr/st
+                            </div>
                         </div>
                     </div>
                 </div>
 
+                {/* Price Summary */}
+                <div className="mt-12 p-6 border border-[#C8AA6E]/30 bg-[#C8AA6E]/5">
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <span className="text-white/60 text-sm uppercase tracking-widest">Totalt för 4 fälgar</span>
+                            <div className="text-white/40 text-xs mt-1">
+                                2× Fram ({frontPrice.toLocaleString('sv-SE')} kr) + 2× Bak ({rearPrice.toLocaleString('sv-SE')} kr)
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <span className="text-[#C8AA6E] text-3xl font-bold">
+                                {totalPrice.toLocaleString('sv-SE')} kr
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Non-binding reassurance */}
+                <div className="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded flex items-center gap-3">
+                    <svg className="w-5 h-5 text-green-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-white/60 text-sm">
+                        <span className="text-green-400 font-bold">Icke bindande</span> — Prisuppgifterna är endast vägledande. Slutgiltigt pris bekräftas innan beställning.
+                    </span>
+                </div>
+
                 <button
                     onClick={handleContinue}
-                    className="mt-16 w-full py-5 bg-[#C8AA6E] text-black font-bold uppercase tracking-widest hover:bg-white transition-colors"
+                    className="mt-6 w-full py-5 bg-[#C8AA6E] text-black font-bold uppercase tracking-widest hover:bg-white transition-colors"
                 >
                     Fortsätt till Reservation
                 </button>
@@ -850,7 +942,7 @@ function DimensionsPhase({
     );
 }
 
-// iOS-style Wheel Picker Component
+// Simple Picker Component with Up/Down arrows
 function WheelPicker({
     values,
     selected,
@@ -864,87 +956,52 @@ function WheelPicker({
     suffix: string;
     label: string;
 }) {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const itemHeight = 48;
-
     const selectedIndex = values.indexOf(selected);
 
-    // Debounced scroll handler - only fires after scrolling stops
-    const handleScroll = () => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
+    const handleUp = () => {
+        if (selectedIndex > 0) {
+            onSelect(values[selectedIndex - 1]);
         }
-
-        timeoutRef.current = setTimeout(() => {
-            if (!containerRef.current) return;
-            const scrollTop = containerRef.current.scrollTop;
-            const index = Math.round(scrollTop / itemHeight);
-            const clampedIndex = Math.max(0, Math.min(index, values.length - 1));
-
-            if (values[clampedIndex] !== undefined && values[clampedIndex] !== selected) {
-                onSelect(values[clampedIndex]);
-            }
-
-            // Snap to exact position
-            containerRef.current.scrollTo({
-                top: clampedIndex * itemHeight,
-                behavior: 'smooth'
-            });
-        }, 100);
     };
 
-    useEffect(() => {
-        if (containerRef.current) {
-            containerRef.current.scrollTop = selectedIndex * itemHeight;
+    const handleDown = () => {
+        if (selectedIndex < values.length - 1) {
+            onSelect(values[selectedIndex + 1]);
         }
-        return () => {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        };
-    }, []);
+    };
 
     return (
         <div className="flex flex-col items-center">
-            <span className="text-white/40 text-xs uppercase tracking-widest mb-2">{label}</span>
-            <div className="relative">
-                {/* Selection highlight */}
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-12 border-y border-[#C8AA6E]/50 pointer-events-none z-10" />
-                {/* Fade overlays */}
-                <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-black to-transparent pointer-events-none z-10" />
-                <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
+            <span className="text-white/40 text-xs uppercase tracking-widest mb-4">{label}</span>
 
-                <div
-                    ref={containerRef}
-                    onScroll={handleScroll}
-                    className="h-36 w-24 overflow-y-auto scrollbar-hide"
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                >
-                    {/* Padding items for scroll effect */}
-                    <div className="h-12" />
-                    {values.map((val) => (
-                        <button
-                            key={val}
-                            onClick={() => {
-                                onSelect(val);
-                                if (containerRef.current) {
-                                    const index = values.indexOf(val);
-                                    containerRef.current.scrollTo({
-                                        top: index * itemHeight,
-                                        behavior: 'smooth'
-                                    });
-                                }
-                            }}
-                            className={`h-12 w-full flex items-center justify-center transition-all duration-200 ${selected === val
-                                ? 'text-white text-2xl font-bold'
-                                : 'text-white/30 text-lg'
-                                }`}
-                        >
-                            {val}{suffix}
-                        </button>
-                    ))}
-                    <div className="h-12" />
+            {/* Up Arrow */}
+            <button
+                onClick={handleUp}
+                disabled={selectedIndex === 0}
+                className="w-16 h-10 flex items-center justify-center text-white/30 hover:text-[#C8AA6E] disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+            >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                </svg>
+            </button>
+
+            {/* Value Display */}
+            <div className="relative my-2">
+                <div className="w-24 h-16 border border-[#C8AA6E]/50 bg-[#C8AA6E]/10 flex items-center justify-center">
+                    <span className="text-white text-3xl font-bold">{selected}{suffix}</span>
                 </div>
             </div>
+
+            {/* Down Arrow */}
+            <button
+                onClick={handleDown}
+                disabled={selectedIndex === values.length - 1}
+                className="w-16 h-10 flex items-center justify-center text-white/30 hover:text-[#C8AA6E] disabled:opacity-20 disabled:cursor-not-allowed transition-colors"
+            >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
         </div>
     );
 }
@@ -1096,7 +1153,7 @@ function ReservePhase({
                         {config.finish && (
                             <div>
                                 <span className="text-white/40 uppercase tracking-widest text-xs block mb-1">Ytfinish</span>
-                                <span className="text-white text-lg">{FINISHES.find(f => f.id === config.finish)?.name}</span>
+                                <span className="text-white text-lg">{FINISHES.find(f => f.id === config.finish)?.name || config.finish}</span>
                             </div>
                         )}
                         {config.frontSize && config.rearSize && (
@@ -1109,17 +1166,59 @@ function ReservePhase({
                         )}
                     </div>
 
-                    <div className="mt-8 pt-6 border-t border-white/10">
+                    {/* Price Breakdown */}
+                    <div className="mt-8 pt-6 border-t border-white/10 space-y-3">
+                        <h4 className="text-white/60 uppercase tracking-widest text-xs mb-4">Prisindikation</h4>
+
+                        {config.frontSize && config.rearSize && (() => {
+                            const arch = config.architecture || "MONOBLOCK";
+                            const frontDiam = parseInt(config.frontSize.split('×')[0]);
+                            const rearDiam = parseInt(config.rearSize.split('×')[0]);
+                            const wheelPrice = (getWheelPrice(arch, frontDiam) * 2) + (getWheelPrice(arch, rearDiam) * 2);
+                            const finishData = FINISHES.find(f => f.id === config.finish);
+                            const finishPrice = finishData?.price || 0;
+                            const totalPrice = wheelPrice + finishPrice;
+
+                            return (
+                                <>
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-white/60">4× Fälgar</span>
+                                        <span className="text-white">{wheelPrice.toLocaleString('sv-SE')} kr</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm">
+                                        <span className="text-white/60">Ytfinish ({finishData?.name || 'Standard'})</span>
+                                        <span className="text-white">{finishPrice > 0 ? `+${finishPrice.toLocaleString('sv-SE')} kr` : 'Inkluderat'}</span>
+                                    </div>
+                                    <div className="flex justify-between pt-3 border-t border-white/10">
+                                        <span className="text-white font-bold uppercase tracking-widest text-sm">Totalt</span>
+                                        <span className="text-[#C8AA6E] text-2xl font-bold">{totalPrice.toLocaleString('sv-SE')} kr</span>
+                                    </div>
+                                </>
+                            );
+                        })()}
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-white/10">
                         <div className="flex justify-between items-center">
                             <span className="text-white/40 text-xs uppercase tracking-widest">Produktionstid</span>
                             <span className="text-[#C8AA6E]">6-8 veckor</span>
                         </div>
                     </div>
 
-                    <p className="mt-8 text-white/30 text-xs leading-relaxed">
-                        Genom att skicka reservationen bekräftar du intresse. Slutgiltigt pris och detaljer
-                        fastställs i samråd med din designkonsult.
-                    </p>
+                    {/* Non-binding reassurance */}
+                    <div className="mt-8 p-4 bg-green-500/10 border border-green-500/30 rounded">
+                        <div className="flex items-start gap-3">
+                            <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <span className="text-green-400 font-bold text-sm block mb-1">Icke bindande förfrågan</span>
+                                <span className="text-white/50 text-xs leading-relaxed block">
+                                    Detta är en intresseanmälan, inte ett köp. Vi kontaktar dig för att diskutera detaljer och bekräfta slutgiltigt pris innan något är bindande.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </motion.section>

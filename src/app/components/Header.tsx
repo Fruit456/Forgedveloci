@@ -20,8 +20,8 @@ export default function Header() {
     const navLinks = [
         { href: "/collection", label: "Kollektion" },
         { href: "/bespoke", label: "Bespoke" },
-        { href: "#about", label: "Om Oss" },
-        { href: "#contact", label: "Kontakt" },
+        { href: "/about", label: "Om Oss" },
+        { href: "/contact", label: "Kontakt" },
     ];
 
     return (
