@@ -138,6 +138,7 @@ function getAvailableDiameters(architecture: string): number[] {
 }
 
 const WIDTHS = [8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5, 12.0];
+const ET_VALUES = [15, 18, 20, 22, 25, 28, 30, 32, 35, 38, 40, 42, 45, 48, 50];
 
 // ============================================================================
 // MAIN COMPONENT
@@ -759,16 +760,18 @@ function DimensionsPhase({
 
     const [frontDiameter, setFrontDiameter] = useState(defaultDiameter);
     const [frontWidth, setFrontWidth] = useState(9.0);
+    const [frontET, setFrontET] = useState(35);
     const [rearDiameter, setRearDiameter] = useState(defaultDiameter);
     const [rearWidth, setRearWidth] = useState(10.0);
+    const [rearET, setRearET] = useState(35);
 
     const frontPrice = getWheelPrice(arch, frontDiameter);
     const rearPrice = getWheelPrice(arch, rearDiameter);
     const totalPrice = (frontPrice * 2) + (rearPrice * 2);
 
     const handleContinue = () => {
-        const front = `${frontDiameter}×${frontWidth}`;
-        const rear = `${rearDiameter}×${rearWidth}`;
+        const front = `${frontDiameter}×${frontWidth} ET${frontET}`;
+        const rear = `${rearDiameter}×${rearWidth} ET${rearET}`;
         onSelect(front, rear);
         onNext();
     };
@@ -805,7 +808,7 @@ function DimensionsPhase({
                             <span className="w-3 h-3 bg-[#C8AA6E] rounded-full"></span>
                             Framhjul
                         </h3>
-                        <div className="flex items-center justify-center gap-4">
+                        <div className="flex items-center justify-center gap-3">
                             <WheelPicker
                                 values={availableDiameters}
                                 selected={frontDiameter}
@@ -813,7 +816,7 @@ function DimensionsPhase({
                                 suffix='"'
                                 label="Diameter"
                             />
-                            <span className="text-4xl text-white/20 font-light">×</span>
+                            <span className="text-3xl text-white/20 font-light">×</span>
                             <WheelPicker
                                 values={WIDTHS}
                                 selected={frontWidth}
@@ -821,9 +824,17 @@ function DimensionsPhase({
                                 suffix='J'
                                 label="Bredd"
                             />
+                            <WheelPicker
+                                values={ET_VALUES}
+                                selected={frontET}
+                                onSelect={setFrontET}
+                                suffix=''
+                                label="ET"
+                                prefix="ET"
+                            />
                         </div>
                         <div className="mt-6 text-center">
-                            <span className="text-[#C8AA6E] text-2xl font-display">{frontDiameter}×{frontWidth}</span>
+                            <span className="text-[#C8AA6E] text-2xl font-display">{frontDiameter}×{frontWidth} ET{frontET}</span>
                             <div className="text-white/50 text-sm mt-1">
                                 {frontPrice.toLocaleString('sv-SE')} kr/st
                             </div>
@@ -836,7 +847,7 @@ function DimensionsPhase({
                             <span className="w-3 h-3 bg-[#C8AA6E] rounded-full"></span>
                             Bakhjul
                         </h3>
-                        <div className="flex items-center justify-center gap-4">
+                        <div className="flex items-center justify-center gap-3">
                             <WheelPicker
                                 values={availableDiameters}
                                 selected={rearDiameter}
@@ -844,7 +855,7 @@ function DimensionsPhase({
                                 suffix='"'
                                 label="Diameter"
                             />
-                            <span className="text-4xl text-white/20 font-light">×</span>
+                            <span className="text-3xl text-white/20 font-light">×</span>
                             <WheelPicker
                                 values={WIDTHS}
                                 selected={rearWidth}
@@ -852,9 +863,17 @@ function DimensionsPhase({
                                 suffix='J'
                                 label="Bredd"
                             />
+                            <WheelPicker
+                                values={ET_VALUES}
+                                selected={rearET}
+                                onSelect={setRearET}
+                                suffix=''
+                                label="ET"
+                                prefix="ET"
+                            />
                         </div>
                         <div className="mt-6 text-center">
-                            <span className="text-[#C8AA6E] text-2xl font-display">{rearDiameter}×{rearWidth}</span>
+                            <span className="text-[#C8AA6E] text-2xl font-display">{rearDiameter}×{rearWidth} ET{rearET}</span>
                             <div className="text-white/50 text-sm mt-1">
                                 {rearPrice.toLocaleString('sv-SE')} kr/st
                             </div>
@@ -906,13 +925,15 @@ function WheelPicker({
     selected,
     onSelect,
     suffix,
-    label
+    label,
+    prefix = ""
 }: {
     values: number[];
     selected: number;
     onSelect: (val: number) => void;
     suffix: string;
     label: string;
+    prefix?: string;
 }) {
     const selectedIndex = values.indexOf(selected);
 
@@ -946,7 +967,7 @@ function WheelPicker({
             {/* Value Display */}
             <div className="relative my-2">
                 <div className="w-24 h-16 border border-[#C8AA6E]/50 bg-[#C8AA6E]/10 flex items-center justify-center">
-                    <span className="text-white text-3xl font-bold">{selected}{suffix}</span>
+                    <span className="text-white text-3xl font-bold">{prefix}{selected}{suffix}</span>
                 </div>
             </div>
 
