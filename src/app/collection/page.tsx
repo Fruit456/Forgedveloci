@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Header from "../components/Header";
 
 // Architecture Collections
 const COLLECTIONS = [
@@ -61,29 +62,7 @@ function CollectionContent() {
 
     return (
         <div className="min-h-screen bg-[#050505] text-white selection:bg-[#C8AA6E] selection:text-black">
-            {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference pointer-events-none">
-                <nav className="max-w-[1800px] mx-auto px-8 py-8 flex items-center justify-between pointer-events-auto">
-                    <Link href="/" className="text-xl tracking-[0.2em] font-display hover:text-[#C8AA6E] transition-colors">
-                        FORGED<span className="text-[#C8AA6E]">VELOCI</span>
-                    </Link>
-                    <div className="hidden md:flex items-center gap-8">
-                        <Link href="/about" className="text-xs uppercase tracking-widest hover:text-[#C8AA6E] transition-colors text-white/60">
-                            Om Oss
-                        </Link>
-                        <Link href="/contact" className="text-xs uppercase tracking-widest hover:text-[#C8AA6E] transition-colors text-white/60">
-                            Kontakt
-                        </Link>
-                        <Link
-                            href="/bespoke"
-                            className="flex items-center gap-2 text-xs uppercase tracking-widest hover:text-[#C8AA6E] transition-colors"
-                        >
-                            <span className="w-2 h-2 bg-[#C8AA6E] rounded-full animate-pulse" />
-                            Atelier Open
-                        </Link>
-                    </div>
-                </nav>
-            </header>
+            <Header />
 
             <main className="pt-32 pb-20 px-8">
                 <div className="max-w-[1800px] mx-auto">

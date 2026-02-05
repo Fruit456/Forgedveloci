@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { useRef } from "react";
+import Header from "../components/Header";
 
 const PROCESS_STEPS = [
     {
@@ -17,7 +18,7 @@ const PROCESS_STEPS = [
         id: 2,
         title: "Formgivningen",
         subtitle: "Precision Milling",
-        description: "Våra 5-axliga CNC-maskiner skulpterar fram designen med mikrometerprecision. Det handlar om att ta bort allt som inte behövs, och maximera styrkan där det räknas. En process som tar timmar, men resultatet varar för evigt.",
+        description: "Våra 5-axliga CNC-maskiner skulpterar fram designen med mikrometerprecision — allt överflödigt tas bort och styrkan maximeras där det räknas. En process som tar timmar, men resultatet varar för evigt.",
         image: "/cnc_milling.png"
     },
     {
@@ -39,21 +40,7 @@ export default function AboutPage() {
     return (
         <div ref={containerRef} className="min-h-screen bg-[#050505] text-white selection:bg-[#C8AA6E] selection:text-black overflow-x-hidden">
 
-            {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference pointer-events-none">
-                <nav className="max-w-[1800px] mx-auto px-8 py-8 flex items-center justify-between pointer-events-auto">
-                    <Link href="/" className="text-xl tracking-[0.2em] font-display hover:text-[#C8AA6E] transition-colors">
-                        FORGED<span className="text-[#C8AA6E]">VELOCI</span>
-                    </Link>
-                    <Link
-                        href="/bespoke"
-                        className="hidden md:flex items-center gap-2 text-xs uppercase tracking-widest hover:text-[#C8AA6E] transition-colors"
-                    >
-                        <span className="w-2 h-2 bg-[#C8AA6E] rounded-full animate-pulse" />
-                        Atelier Open
-                    </Link>
-                </nav>
-            </header>
+            <Header />
 
             {/* Hero Section */}
             <section className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -123,12 +110,14 @@ export default function AboutPage() {
                             </p>
                         </motion.div>
                     </div>
-                    <div className="relative aspect-square md:aspect-[4/3] bg-zinc-900 overflow-hidden border border-white/5">
-                        {/* Abstract texture or detail shot */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#C8AA6E]/20 to-transparent opacity-20" />
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="font-display text-9xl text-white/5 font-bold">FV</span>
-                        </div>
+                    <div className="relative aspect-square md:aspect-[4/3] overflow-hidden border border-white/5">
+                        <Image
+                            src="/workshop_hero.png"
+                            alt="ForgedVeloci Workshop"
+                            fill
+                            className="object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#C8AA6E]/10 to-transparent" />
                     </div>
                 </div>
             </section>
@@ -198,8 +187,7 @@ export default function AboutPage() {
             <footer className="py-12 px-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-white/20 text-xs uppercase tracking-widest">
                 <span>&copy; 2026 ForgedVeloci. All rights reserved.</span>
                 <div className="flex gap-8 mt-4 md:mt-0">
-                    <Link href="#" className="hover:text-white transition-colors">Instagram</Link>
-                    <Link href="#" className="hover:text-white transition-colors">Email</Link>
+                    <a href="https://www.instagram.com/forgedveloci" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
                 </div>
             </footer>
         </div>

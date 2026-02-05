@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Header from "../components/Header";
 
 // ============================================================================
 // TYPES
@@ -32,7 +33,7 @@ const ARCHITECTURES = [
         name: "Monoblock",
         tagline: "Pure Performance",
         description: "Smidd i ett enda stycke från flygplansaluminium 6061-T6. Maximal styvhet, minimal vikt.",
-        specs: ["Vikt från 8.2kg", "Max last 900kg", "Flow-formed"],
+        specs: ["Vikt från 8.2kg", "Max last 900kg", "Flow-formed", "Superconcave"],
         image: "/wheel_monoblock_v2.png",
         startPrice: 3850
     },
@@ -239,17 +240,7 @@ export default function BespokeAtelier() {
             </div>
 
             {/* HEADER */}
-            <header className="fixed top-0 left-0 right-0 z-50 px-8 py-6 flex justify-between items-center mix-blend-difference">
-                <Link href="/" className="text-white text-xl tracking-[0.2em] font-display hover:text-[#C8AA6E] transition-colors">
-                    FORGED<span className="text-[#C8AA6E]">VELOCI</span>
-                </Link>
-                <div className="hidden md:flex items-center gap-4 text-xs tracking-widest text-white/50 uppercase">
-                    <span className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#C8AA6E] animate-pulse"></span>
-                        Atelier Open
-                    </span>
-                </div>
-            </header>
+            <Header />
 
             {/* MAIN CONTENT */}
             <main className="relative z-10">
@@ -265,9 +256,6 @@ export default function BespokeAtelier() {
                         <VehiclePhase
                             regInput={regInput}
                             setRegInput={setRegInput}
-                            isSearching={isSearching}
-                            vehicle={vehicle}
-                            onSearch={handleVehicleSearch}
                             onNext={() => goToPhase("architecture")}
                             onBack={() => goToPhase("intro")}
                         />
@@ -314,7 +302,7 @@ export default function BespokeAtelier() {
                     {/* PHASE: RESERVE */}
                     {phase === "reserve" && (
                         <ReservePhase
-                            vehicle={vehicle}
+                            regNumber={regInput}
                             config={config}
                             onBack={() => goToPhase("dimensions")}
                         />
@@ -432,18 +420,6 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
                     <span>Limiterad Produktion</span>
                 </motion.div>
             </div>
-
-            {/* Scroll indicator */}
-            <motion.div
-                className="absolute bottom-12 left-1/2 -translate-x-1/2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, y: [0, 10, 0] }}
-                transition={{ delay: 1.5, y: { repeat: Infinity, duration: 2 } }}
-            >
-                <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2">
-                    <div className="w-1 h-2 bg-[#C8AA6E] rounded-full" />
-                </div>
-            </motion.div>
         </motion.section>
     );
 }
@@ -451,20 +427,20 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
 function VehiclePhase({
     regInput,
     setRegInput,
-    isSearching,
-    vehicle,
-    onSearch,
     onNext,
     onBack
 }: {
     regInput: string;
     setRegInput: (v: string) => void;
-    isSearching: boolean;
-    vehicle: VehicleData | null;
-    onSearch: () => void;
     onNext: () => void;
     onBack: () => void;
 }) {
+    const handleContinue = () => {
+        if (regInput.length >= 2) {
+            onNext();
+        }
+    };
+
     return (
         <motion.section
             key="vehicle"
@@ -487,7 +463,7 @@ function VehiclePhase({
                 <span className="text-[#C8AA6E] text-xs tracking-[0.4em] uppercase block mb-4">Steg 01 / 05</span>
                 <h2 className="text-4xl md:text-6xl font-display uppercase mb-4">Ditt Fordon</h2>
                 <p className="text-white/50 text-lg mb-12 max-w-xl">
-                    Ange ditt registreringsnummer så hämtar vi fordonsdata och säkerställer perfekt passform.
+                    Ange ditt registreringsnummer för att fortsätta.
                 </p>
 
                 <div className="space-y-8">
@@ -496,63 +472,21 @@ function VehiclePhase({
                             type="text"
                             value={regInput}
                             onChange={(e) => setRegInput(e.target.value.toUpperCase())}
-                            onKeyDown={(e) => e.key === "Enter" && onSearch()}
+                            onKeyDown={(e) => e.key === "Enter" && handleContinue()}
                             placeholder="ABC 123"
                             maxLength={7}
-                            disabled={isSearching || !!vehicle}
-                            className="w-full bg-transparent border-b-2 border-white/20 focus:border-[#C8AA6E] py-6 text-4xl md:text-6xl font-mono text-white placeholder-white/10 outline-none transition-colors uppercase tracking-[0.3em] text-center disabled:opacity-50"
+                            className="w-full bg-transparent border-b-2 border-white/20 focus:border-[#C8AA6E] py-6 text-4xl md:text-6xl font-mono text-white placeholder-white/10 outline-none transition-colors uppercase tracking-[0.3em] text-center"
+                            autoFocus
                         />
-                        {isSearching && (
-                            <motion.div
-                                className="absolute bottom-0 left-0 h-[2px] bg-[#C8AA6E]"
-                                initial={{ width: "0%" }}
-                                animate={{ width: "100%" }}
-                                transition={{ duration: 1.5, repeat: Infinity }}
-                            />
-                        )}
                     </div>
 
-                    {!vehicle && !isSearching && (
-                        <button
-                            onClick={onSearch}
-                            disabled={regInput.length < 3}
-                            className="w-full py-5 border border-white/20 text-white uppercase tracking-widest hover:bg-white hover:text-black transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                        >
-                            Verifiera Fordon
-                        </button>
-                    )}
-
-                    {vehicle && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="bg-white/5 border border-[#C8AA6E]/30 p-8"
-                        >
-                            <div className="flex items-center justify-between mb-6">
-                                <span className="text-[#C8AA6E] text-xs uppercase tracking-widest flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-[#C8AA6E] rounded-full animate-pulse" />
-                                    Verifierad
-                                </span>
-                                <button
-                                    onClick={() => window.location.reload()}
-                                    className="text-white/30 text-xs hover:text-white transition-colors"
-                                >
-                                    Ändra
-                                </button>
-                            </div>
-                            <div className="text-3xl font-display uppercase mb-2">
-                                {regInput}
-                            </div>
-                            <div className="text-white/50">Fordonsdata hanteras manuellt</div>
-
-                            <button
-                                onClick={onNext}
-                                className="mt-8 w-full py-5 bg-[#C8AA6E] text-black font-bold uppercase tracking-widest hover:bg-white transition-colors"
-                            >
-                                Fortsätt till Design
-                            </button>
-                        </motion.div>
-                    )}
+                    <button
+                        onClick={handleContinue}
+                        disabled={regInput.length < 2}
+                        className="w-full py-5 bg-[#C8AA6E] text-black font-bold uppercase tracking-widest hover:bg-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                        Fortsätt till Design
+                    </button>
                 </div>
             </div>
         </motion.section>
@@ -591,9 +525,32 @@ function ArchitecturePhase({
 
                 <span className="text-[#C8AA6E] text-xs tracking-[0.4em] uppercase block mb-4">Steg 02 / 05</span>
                 <h2 className="text-4xl md:text-6xl font-display uppercase mb-4">Arkitektur</h2>
-                <p className="text-white/50 text-lg mb-16 max-w-xl">
+                <p className="text-white/50 text-lg mb-4 max-w-xl">
                     Välj konstruktionen som definierar din hjuluppsättning.
                 </p>
+                <p className="text-white/30 text-sm italic mb-8 max-w-xl">
+                    Visade designer är inspiration — varje hjul skapas unikt efter din vision.
+                </p>
+
+                {/* Bespoke Note */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="mb-12 p-6 border border-[#C8AA6E]/20 bg-gradient-to-r from-[#C8AA6E]/5 to-transparent"
+                >
+                    <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-full bg-[#C8AA6E]/10 flex items-center justify-center flex-shrink-0">
+                            <span className="text-[#C8AA6E] text-lg">✦</span>
+                        </div>
+                        <div>
+                            <h4 className="text-white font-display uppercase tracking-wide mb-2">Inga gränser</h4>
+                            <p className="text-white/50 text-sm leading-relaxed max-w-2xl">
+                                Designerna du ser är endast startpunkter. Våra ingenjörer arbetar med dig för att skapa exakt det du drömmer om — från spoke-mönster till unika detaljer. Allt är möjligt.
+                            </p>
+                        </div>
+                    </div>
+                </motion.div>
 
                 <div className="grid md:grid-cols-4 gap-4">
                     {ARCHITECTURES.map((arch, i) => (
@@ -647,6 +604,7 @@ function ArchitecturePhase({
                         </motion.button>
                     ))}
                 </div>
+
             </div>
         </motion.section>
     );
@@ -1007,15 +965,15 @@ function WheelPicker({
 }
 
 function ReservePhase({
-    vehicle,
+    regNumber,
     config,
     onBack
 }: {
-    vehicle: VehicleData | null;
+    regNumber: string;
     config: WheelConfig;
     onBack: () => void;
 }) {
-    const [form, setForm] = useState({ name: "", email: "", phone: "", notes: "" });
+    const [form, setForm] = useState({ name: "", email: "", phone: "", notes: "", referenceImages: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isComplete, setIsComplete] = useState(false);
 
@@ -1113,13 +1071,50 @@ function ReservePhase({
                             onChange={(e) => setForm({ ...form, phone: e.target.value })}
                             className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/30 focus:border-[#C8AA6E] outline-none transition-colors"
                         />
-                        <textarea
-                            placeholder="Övriga önskemål (valfritt)"
-                            value={form.notes}
-                            onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                            rows={3}
-                            className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder-white/30 focus:border-[#C8AA6E] outline-none transition-colors resize-none"
-                        />
+                        <div className="space-y-2">
+                            <label className="text-xs uppercase tracking-widest text-white/50 block">
+                                Beskriv din vision
+                            </label>
+                            <textarea
+                                placeholder="Berätta hur du vill att dina fälgar ska se ut — stil, spoke-design, detaljer, inspiration..."
+                                value={form.notes}
+                                onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                                rows={4}
+                                className="w-full bg-transparent border border-white/20 p-4 text-white placeholder-white/30 focus:border-[#C8AA6E] outline-none transition-colors resize-none"
+                            />
+                        </div>
+
+                        {/* Reference Images Upload */}
+                        <div className="space-y-2">
+                            <label className="text-xs uppercase tracking-widest text-white/50 block">
+                                Referensbilder (valfritt)
+                            </label>
+                            <div className="border border-dashed border-white/20 p-6 hover:border-[#C8AA6E]/50 transition-colors cursor-pointer">
+                                <input
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    className="hidden"
+                                    id="reference-images"
+                                    onChange={(e) => {
+                                        const files = e.target.files;
+                                        if (files) {
+                                            // Store file names for display
+                                            const fileNames = Array.from(files).map(f => f.name).join(', ');
+                                            setForm({ ...form, referenceImages: fileNames });
+                                        }
+                                    }}
+                                />
+                                <label htmlFor="reference-images" className="cursor-pointer flex flex-col items-center gap-3">
+                                    <svg className="w-8 h-8 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span className="text-white/40 text-sm text-center">
+                                        Ladda upp inspirationsbilder eller exempel på designer du gillar
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
 
                         <button
                             type="submit"
@@ -1138,10 +1133,10 @@ function ReservePhase({
                     </h3>
 
                     <div className="space-y-6 text-sm">
-                        {vehicle && (
+                        {regNumber && (
                             <div>
-                                <span className="text-white/40 uppercase tracking-widest text-xs block mb-1">Fordon</span>
-                                <span className="text-white text-lg">{vehicle.make} {vehicle.model} ({vehicle.year})</span>
+                                <span className="text-white/40 uppercase tracking-widest text-xs block mb-1">Registreringsnummer</span>
+                                <span className="text-white text-lg font-mono tracking-wider">{regNumber}</span>
                             </div>
                         )}
                         {config.architecture && (

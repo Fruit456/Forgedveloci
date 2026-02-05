@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
+import Header from "../components/Header";
 
 export default function ContactPage() {
     const [formState, setFormState] = useState({
@@ -22,21 +23,7 @@ export default function ContactPage() {
     return (
         <div className="min-h-screen bg-[#050505] text-white selection:bg-[#C8AA6E] selection:text-black">
 
-            {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 mix-blend-difference pointer-events-none">
-                <nav className="max-w-[1800px] mx-auto px-8 py-8 flex items-center justify-between pointer-events-auto">
-                    <Link href="/" className="text-xl tracking-[0.2em] font-display hover:text-[#C8AA6E] transition-colors">
-                        FORGED<span className="text-[#C8AA6E]">VELOCI</span>
-                    </Link>
-                    <Link
-                        href="/bespoke"
-                        className="hidden md:flex items-center gap-2 text-xs uppercase tracking-widest hover:text-[#C8AA6E] transition-colors"
-                    >
-                        <span className="w-2 h-2 bg-[#C8AA6E] rounded-full animate-pulse" />
-                        Atelier Open
-                    </Link>
-                </nav>
-            </header>
+            <Header />
 
             <main className="pt-32 pb-20 px-8">
                 <div className="max-w-[1800px] mx-auto">
@@ -155,8 +142,7 @@ export default function ContactPage() {
                             <div>
                                 <h3 className="text-2xl font-display uppercase mb-6 text-white">Socialt</h3>
                                 <div className="flex gap-8">
-                                    <Link href="#" className="text-white/60 hover:text-white uppercase tracking-widest text-sm transition-colors">Instagram</Link>
-                                    <Link href="#" className="text-white/60 hover:text-white uppercase tracking-widest text-sm transition-colors">LinkedIn</Link>
+                                    <a href="https://www.instagram.com/forgedveloci" target="_blank" rel="noopener noreferrer" className="text-white/60 hover:text-white uppercase tracking-widest text-sm transition-colors">Instagram</a>
                                 </div>
                             </div>
 
@@ -170,8 +156,8 @@ export default function ContactPage() {
             <footer className="py-12 px-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-white/20 text-xs uppercase tracking-widest">
                 <span>&copy; 2026 ForgedVeloci. All rights reserved.</span>
                 <div className="flex gap-8 mt-4 md:mt-0">
-                    <Link href="#" className="hover:text-white transition-colors">Integritetspolicy</Link>
-                    <Link href="#" className="hover:text-white transition-colors">Köpvillkor</Link>
+                    <Link href="/privacy" className="hover:text-white transition-colors">Integritetspolicy</Link>
+                    <Link href="/terms" className="hover:text-white transition-colors">Köpvillkor</Link>
                 </div>
             </footer>
         </div>
