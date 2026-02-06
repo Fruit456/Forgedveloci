@@ -340,6 +340,16 @@ export default function BespokeAtelier() {
 // ============================================================================
 
 function HeroPhase({ onStart }: { onStart: () => void }) {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleStart = () => {
+        setIsLoading(true);
+        // Small delay to show loading state before transition
+        requestAnimationFrame(() => {
+            onStart();
+        });
+    };
+
     return (
         <motion.section
             key="hero"
@@ -372,7 +382,7 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
                     className="text-[#C8AA6E] text-sm tracking-[0.4em] uppercase mb-6"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
+                    transition={{ delay: 0.1 }}
                 >
                     Bespoke Wheel Manufacturing
                 </motion.p>
@@ -381,7 +391,7 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
                     className="text-5xl md:text-7xl lg:text-8xl font-display uppercase leading-[0.9] mb-8"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
+                    transition={{ delay: 0.2 }}
                 >
                     Your Vision.<br />
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C8AA6E] to-[#8B7355]">
@@ -393,26 +403,39 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
                     className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.7 }}
+                    transition={{ delay: 0.3 }}
                 >
                     Varje hjul vi skapar är en unik komposition av precision, material och personlighet.
                     Inga kompromisser. Ingen massproduktion. Bara perfektion.
                 </motion.p>
 
                 <motion.button
-                    onClick={onStart}
-                    className="group relative px-12 py-5 bg-[#C8AA6E] text-black font-bold uppercase tracking-[0.2em] overflow-hidden"
+                    onClick={handleStart}
+                    disabled={isLoading}
+                    className="group relative px-12 py-5 bg-[#C8AA6E] text-black font-bold uppercase tracking-[0.2em] overflow-hidden disabled:opacity-70"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.9 }}
+                    transition={{ delay: 0.4 }}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                 >
                     <span className="relative z-10 flex items-center gap-3">
-                        Påbörja Din Design
-                        <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
+                        {isLoading ? (
+                            <>
+                                <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Laddar...
+                            </>
+                        ) : (
+                            <>
+                                Påbörja Din Design
+                                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
+                            </>
+                        )}
                     </span>
                     <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                 </motion.button>
@@ -421,7 +444,7 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
                     className="mt-16 flex items-center justify-center gap-12 text-white/40 text-xs uppercase tracking-widest"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 1.2 }}
+                    transition={{ delay: 0.5 }}
                 >
                     <span>6-8 Veckors Produktion</span>
                     <span className="w-1 h-1 rounded-full bg-[#C8AA6E]" />
