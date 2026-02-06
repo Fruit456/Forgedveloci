@@ -457,7 +457,7 @@ function VehiclePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-4 py-20 md:px-8 md:py-32"
+            className="min-h-screen flex flex-col justify-start pt-32 md:justify-center md:pt-0 px-4 md:px-8"
         >
             <div className="max-w-3xl w-full flex flex-col items-center">
                 <button
@@ -520,7 +520,7 @@ function ArchitecturePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex flex-col px-8 py-24 md:py-32"
+            className="min-h-screen flex flex-col px-4 pt-24 pb-32 md:px-8 md:py-32"
         >
             <div className="max-w-[1800px] mx-auto w-full">
                 <button
@@ -576,7 +576,7 @@ function ArchitecturePhase({
                                 }`}
                         >
                             {/* Image Section (Top 50%) */}
-                            <div className="relative h-[200px] md:h-[340px] w-full overflow-hidden border-b border-white/5 bg-black">
+                            <div className="relative h-[240px] md:h-[340px] w-full overflow-hidden border-b border-white/5 bg-black">
                                 <Image
                                     src={arch.image}
                                     alt={arch.name}
@@ -1056,9 +1056,9 @@ function ReservePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-4 py-20 md:px-8 md:py-32"
+            className="min-h-screen flex flex-col justify-start pt-32 md:justify-center md:pt-0 px-4 md:px-8"
         >
-            <div className="max-w-5xl w-full grid md:grid-cols-2 gap-8 md:gap-16">
+            <div className="max-w-5xl w-full grid md:grid-cols-2 gap-8 md:gap-16 pb-20">
                 {/* Form */}
                 <div>
                     <button
