@@ -448,7 +448,7 @@ function VehiclePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-8 py-32"
+            className="min-h-screen flex items-center justify-center px-8 py-24 md:py-32"
         >
             <div className="max-w-3xl w-full">
                 <button
@@ -511,7 +511,7 @@ function ArchitecturePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex flex-col px-8 py-32"
+            className="min-h-screen flex flex-col px-8 py-24 md:py-32"
         >
             <div className="max-w-[1800px] mx-auto w-full">
                 <button
@@ -567,7 +567,7 @@ function ArchitecturePhase({
                                 }`}
                         >
                             {/* Image Section (Top 50%) */}
-                            <div className="relative h-[340px] w-full overflow-hidden border-b border-white/5 bg-black">
+                            <div className="relative h-[200px] md:h-[340px] w-full overflow-hidden border-b border-white/5 bg-black">
                                 <Image
                                     src={arch.image}
                                     alt={arch.name}
@@ -577,11 +577,11 @@ function ArchitecturePhase({
                             </div>
 
                             {/* Content Section (Bottom) */}
-                            <div className="p-8 flex flex-col flex-1">
+                            <div className="p-6 md:p-8 flex flex-col flex-1">
                                 <span className="text-[#C8AA6E] text-xs uppercase tracking-widest mb-3 font-bold">
                                     {arch.tagline}
                                 </span>
-                                <h3 className="text-3xl font-display uppercase mb-4 text-white">
+                                <h3 className="text-2xl md:text-3xl font-display uppercase mb-4 text-white">
                                     {arch.name}
                                 </h3>
                                 <div className="text-[#C8AA6E] text-xl font-bold mb-4">
@@ -626,7 +626,7 @@ function SurfacePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-8 py-32"
+            className="min-h-screen flex items-center justify-center px-8 py-24 md:py-32"
         >
             <div className="max-w-5xl w-full">
                 <button
@@ -782,7 +782,7 @@ function DimensionsPhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-8 py-32"
+            className="min-h-screen flex items-center justify-center px-8 py-24 md:py-32"
         >
             <div className="max-w-4xl w-full">
                 <button
@@ -1011,7 +1011,7 @@ function ReservePhase({
                 key="success"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="min-h-screen flex items-center justify-center px-8 py-32"
+                className="min-h-screen flex items-center justify-center px-8 py-24 md:py-32"
             >
                 <div className="max-w-2xl text-center">
                     <motion.div
@@ -1046,7 +1046,7 @@ function ReservePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-8 py-32"
+            className="min-h-screen flex items-center justify-center px-8 py-24 md:py-32"
         >
             <div className="max-w-5xl w-full grid md:grid-cols-2 gap-16">
                 {/* Form */}
