@@ -746,7 +746,6 @@ textarea::placeholder {
   padding: 1rem 3rem;
   background: rgba(5, 5, 5, 0.95);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .header-inner {

@@ -9,20 +9,12 @@ import ProductSection from "./components/ProductSection";
 import TrustSection from "./components/TrustSection";
 
 export default function Home() {
-  const [regNumber, setRegNumber] = useState("");
   const [contentRevealed, setContentRevealed] = useState(false);
   const containerRef = useRef(null);
 
   const handleVideoEnd = useCallback(() => {
     setContentRevealed(true);
   }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (regNumber.trim()) {
-      window.location.href = `/collection?reg=${encodeURIComponent(regNumber)}`;
-    }
-  };
 
   const scrollToProducts = () => {
     document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
@@ -77,41 +69,17 @@ export default function Home() {
                 </motion.div>
               </div>
 
-              {/* BOTTOM: VELOCI + Search */}
+              {/* BOTTOM: VELOCI */}
               <div className="relative z-10 flex items-end justify-end">
-                <div className="flex flex-col items-end w-full">
-
-                  {/* Quick Search floating above text */}
-                  <motion.div
-                    className="mb-8 mr-2 md:mr-10"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1 }}
-                  >
-                    <form onSubmit={handleSubmit} className="flex items-center gap-4 bg-black/40 backdrop-blur-sm p-2 pr-6 border border-white/10">
-                      <input
-                        type="text"
-                        value={regNumber}
-                        onChange={(e) => setRegNumber(e.target.value.toUpperCase())}
-                        placeholder="REG NR"
-                        className="bg-transparent border-none text-xl font-display uppercase tracking-widest text-[#C8AA6E] w-32 text-center placeholder:text-white/20 focus:ring-0"
-                      />
-                      <button type="submit" className="text-xs uppercase tracking-widest text-white/60 hover:text-white">
-                        Sök Bil
-                      </button>
-                    </form>
-                  </motion.div>
-
-                  <motion.div
-                    initial={{ x: "100%" }}
-                    animate={{ x: 0 }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <h1 className="text-mega leading-none text-transparent bg-clip-text bg-gradient-to-b from-white via-[#C8AA6E] to-[#8f794a] opacity-90">
-                      VELOCI
-                    </h1>
-                  </motion.div>
-                </div>
+                <motion.div
+                  initial={{ x: "100%" }}
+                  animate={{ x: 0 }}
+                  transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <h1 className="text-mega leading-none text-transparent bg-clip-text bg-gradient-to-b from-white via-[#C8AA6E] to-[#8f794a] opacity-90">
+                    VELOCI
+                  </h1>
+                </motion.div>
               </div>
 
             </div>
