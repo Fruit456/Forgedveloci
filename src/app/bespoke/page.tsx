@@ -161,7 +161,7 @@ export default function BespokeAtelier() {
         if (showIntro) {
             const timer = setTimeout(() => {
                 setShowIntro(false);
-            }, 3500);
+            }, 1500); // Reduced from 3500ms to 1500ms
             return () => clearTimeout(timer);
         }
     }, [showIntro]);
@@ -190,9 +190,10 @@ export default function BespokeAtelier() {
             <AnimatePresence>
                 {showIntro && (
                     <motion.div
-                        className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
+                        className="fixed inset-0 z-[100] bg-black flex items-center justify-center cursor-pointer"
                         exit={{ opacity: 0 }}
                         transition={{ duration: 1 }}
+                        onClick={() => setShowIntro(false)} // Tap to skip
                     >
                         <motion.div
                             initial={{ opacity: 0, scale: 0.8 }}
@@ -572,6 +573,7 @@ function ArchitecturePhase({
                                     src={arch.image}
                                     alt={arch.name}
                                     fill
+                                    sizes="(max-width: 768px) 100vw, 25vw"
                                     className="object-contain group-hover:scale-105 transition-all duration-700"
                                 />
                             </div>
