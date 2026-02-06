@@ -32,8 +32,8 @@ export default function Header() {
             transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
         >
             <div className="header-inner">
-                {/* Logo */}
-                <Link href="/" className="header-logo">
+                {/* Logo - hidden on mobile */}
+                <Link href="/" className="header-logo hidden md:block">
                     <div className="relative h-12 w-48 md:h-14 md:w-56 transition-all duration-300">
                         <Image
                             src="/LOGOvit.png"
