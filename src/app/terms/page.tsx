@@ -31,7 +31,7 @@ export default function TermsPage() {
                         <section>
                             <h2 className="text-2xl font-display uppercase mb-4 text-[#C8AA6E]">1. Allmänt</h2>
                             <p className="text-white/60 leading-relaxed">
-                                Dessa köpvillkor gäller för alla beställningar som görs hos SpadesVeloci, enskild firma. Genom att lägga en beställning godkänner du dessa villkor i sin helhet. Varumärket ForgedVeloci används för marknadsföring och produkter tillverkade av SpadesVeloci.
+                                Dessa köpvillkor gäller för alla beställningar som görs hos SpadesVeloci. Genom att lägga en beställning godkänner du dessa villkor i sin helhet. Varumärket ForgedVeloci används för marknadsföring och produkter tillverkade av SpadesVeloci.
                             </p>
                         </section>
 
@@ -50,7 +50,7 @@ export default function TermsPage() {
                                 <li><strong>65% slutbetalning</strong> innan leverans/upphämtning</li>
                             </ul>
                             <p className="text-white/60 leading-relaxed mt-4">
-                                Vi accepterar banköverföring. Alla priser är inklusive moms om inget annat anges. Leverans sker först efter att fullständig betalning har mottagits och verifierats.
+                                Vi accepterar faktura, Swish och banköverföring. Alla priser är inklusive moms om inget annat anges. Leverans sker först efter att fullständig betalning har mottagits och verifierats.
                             </p>
                         </section>
 

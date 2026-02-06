@@ -31,7 +31,7 @@ export default function PrivacyPolicyPage() {
                         <section>
                             <h2 className="text-2xl font-display uppercase mb-4 text-[#C8AA6E]">1. Personuppgiftsansvarig</h2>
                             <p className="text-white/60 leading-relaxed">
-                                SpadesVeloci, enskild firma ("vi", "oss", "vår") är personuppgiftsansvarig för behandlingen av dina personuppgifter. Varumärket ForgedVeloci används för marknadsföring och produkter. Denna integritetspolicy förklarar hur vi samlar in, använder och skyddar dina personuppgifter i enlighet med EU:s dataskyddsförordning (GDPR).
+                                SpadesVeloci ("vi", "oss", "vår") är personuppgiftsansvarig för behandlingen av dina personuppgifter. Varumärket ForgedVeloci används för marknadsföring och produkter. Denna integritetspolicy förklarar hur vi samlar in, använder och skyddar dina personuppgifter i enlighet med EU:s dataskyddsförordning (GDPR).
                             </p>
                         </section>
 
