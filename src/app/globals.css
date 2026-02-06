@@ -779,6 +779,13 @@ textarea::placeholder {
   transition: all 0.3s ease;
 }
 
+/* Force hide on mobile to beat caching/specificity issues */
+@media (max-width: 767px) {
+  .header-logo.hidden {
+    display: none !important;
+  }
+}
+
 /* Adjust size on scroll if desired */
 .header-scrolled .header-logo-img {
   height: 40px;
