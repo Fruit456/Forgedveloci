@@ -350,16 +350,8 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
         >
             {/* Background Video/Image */}
             <div className="absolute inset-0 z-0">
-                {/* Mobile Static Image */}
-                <div className="absolute inset-0 md:hidden">
-                    <Image
-                        src="/video-poster.jpg"
-                        alt="Background"
-                        fill
-                        className="object-cover opacity-30"
-                        priority
-                    />
-                </div>
+                {/* Mobile Premium Gradient Background */}
+                <div className="absolute inset-0 md:hidden bg-gradient-to-b from-[#050505] via-[#111] to-[#050505]" />
 
                 {/* Desktop Video */}
                 <video
@@ -465,12 +457,12 @@ function VehiclePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-8 py-24 md:py-32"
+            className="min-h-screen flex items-center justify-center px-4 py-20 md:px-8 md:py-32"
         >
-            <div className="max-w-3xl w-full">
+            <div className="max-w-3xl w-full flex flex-col items-center">
                 <button
                     onClick={onBack}
-                    className="flex items-center gap-2 text-white/40 hover:text-white text-sm uppercase tracking-widest mb-12 transition-colors"
+                    className="self-start flex items-center gap-2 text-white/40 hover:text-white text-xs md:text-sm uppercase tracking-widest mb-8 md:mb-12 transition-colors"
                 >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -1064,9 +1056,9 @@ function ReservePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-8 py-24 md:py-32"
+            className="min-h-screen flex items-center justify-center px-4 py-20 md:px-8 md:py-32"
         >
-            <div className="max-w-5xl w-full grid md:grid-cols-2 gap-16">
+            <div className="max-w-5xl w-full grid md:grid-cols-2 gap-8 md:gap-16">
                 {/* Form */}
                 <div>
                     <button
