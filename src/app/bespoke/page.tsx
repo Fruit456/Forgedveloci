@@ -356,7 +356,7 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, y: -50 }}
-            className="min-h-screen flex flex-col items-center justify-center px-8 text-center relative"
+            className="min-h-screen flex flex-col items-center justify-center px-4 md:px-8 text-center relative pt-20 pb-24 md:pt-0 md:pb-0"
         >
             {/* Background Video/Image */}
             <div className="absolute inset-0 z-0">
@@ -379,7 +379,7 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
 
             <div className="relative z-10 max-w-4xl mx-auto">
                 <motion.p
-                    className="text-[#C8AA6E] text-sm tracking-[0.4em] uppercase mb-6"
+                    className="text-[#C8AA6E] text-xs md:text-sm tracking-[0.2em] md:tracking-[0.4em] uppercase mb-4 md:mb-6"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
@@ -388,7 +388,7 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
                 </motion.p>
 
                 <motion.h1
-                    className="text-5xl md:text-7xl lg:text-8xl font-display uppercase leading-[0.9] mb-8"
+                    className="text-3xl md:text-7xl lg:text-8xl font-display uppercase leading-[0.95] mb-4 md:mb-8"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
@@ -400,7 +400,7 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
                 </motion.h1>
 
                 <motion.p
-                    className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-12 leading-relaxed"
+                    className="text-white/60 text-base md:text-xl max-w-2xl mx-auto mb-8 md:mb-12 leading-relaxed px-2"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
@@ -412,7 +412,7 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
                 <motion.button
                     onClick={handleStart}
                     disabled={isLoading}
-                    className="group relative px-12 py-5 bg-[#C8AA6E] text-black font-bold uppercase tracking-[0.2em] overflow-hidden disabled:opacity-70"
+                    className="group relative px-8 py-4 md:px-12 md:py-5 bg-[#C8AA6E] text-black font-bold uppercase tracking-[0.1em] md:tracking-[0.2em] text-sm md:text-base overflow-hidden disabled:opacity-70"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
@@ -441,15 +441,15 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
                 </motion.button>
 
                 <motion.div
-                    className="mt-16 flex items-center justify-center gap-12 text-white/40 text-xs uppercase tracking-widest"
+                    className="mt-8 md:mt-16 flex flex-col md:flex-row items-center justify-center gap-3 md:gap-12 text-white/40 text-[10px] md:text-xs uppercase tracking-widest"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
                 >
                     <span>6-8 Veckors Produktion</span>
-                    <span className="w-1 h-1 rounded-full bg-[#C8AA6E]" />
+                    <span className="hidden md:block w-1 h-1 rounded-full bg-[#C8AA6E]" />
                     <span>Handtillverkad</span>
-                    <span className="w-1 h-1 rounded-full bg-[#C8AA6E]" />
+                    <span className="hidden md:block w-1 h-1 rounded-full bg-[#C8AA6E]" />
                     <span>Limiterad Produktion</span>
                 </motion.div>
             </div>
