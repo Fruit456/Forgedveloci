@@ -159,9 +159,13 @@ export default function BespokeAtelier() {
     // Auto-advance from intro after delay
     useEffect(() => {
         if (showIntro) {
+            // Check if mobile (width < 768px)
+            const isMobile = window.innerWidth < 768;
+            const delay = isMobile ? 0 : 1500; // 0ms delay on mobile, 1.5s on desktop
+
             const timer = setTimeout(() => {
                 setShowIntro(false);
-            }, 1500); // Reduced from 3500ms to 1500ms
+            }, delay);
             return () => clearTimeout(timer);
         }
     }, [showIntro]);
@@ -190,7 +194,7 @@ export default function BespokeAtelier() {
             <AnimatePresence>
                 {showIntro && (
                     <motion.div
-                        className="fixed inset-0 z-[100] bg-black flex items-center justify-center cursor-pointer"
+                        className="fixed inset-0 z-[100] bg-black hidden md:flex items-center justify-center cursor-pointer"
                         exit={{ opacity: 0 }}
                         transition={{ duration: 1 }}
                         onClick={() => setShowIntro(false)} // Tap to skip
@@ -346,12 +350,24 @@ function HeroPhase({ onStart }: { onStart: () => void }) {
         >
             {/* Background Video/Image */}
             <div className="absolute inset-0 z-0">
+                {/* Mobile Static Image */}
+                <div className="absolute inset-0 md:hidden">
+                    <Image
+                        src="/video-poster.jpg"
+                        alt="Background"
+                        fill
+                        className="object-cover opacity-30"
+                        priority
+                    />
+                </div>
+
+                {/* Desktop Video */}
                 <video
                     autoPlay
                     muted
                     loop
                     playsInline
-                    className="w-full h-full object-cover opacity-30"
+                    className="hidden md:block w-full h-full object-cover opacity-30"
                     poster="/video-poster.jpg"
                 >
                     <source src="/Luxury_Automotive_Commercial_Generated.mp4" type="video/mp4" />
