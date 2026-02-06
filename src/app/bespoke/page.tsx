@@ -636,7 +636,7 @@ function SurfacePhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-8 py-24 md:py-32"
+            className="min-h-screen flex flex-col justify-start pt-32 md:justify-center md:pt-0 px-4 md:px-8"
         >
             <div className="max-w-5xl w-full">
                 <button
@@ -792,7 +792,7 @@ function DimensionsPhase({
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="min-h-screen flex items-center justify-center px-8 py-24 md:py-32"
+            className="min-h-screen flex flex-col justify-start pt-32 md:justify-center md:pt-0 px-4 md:px-8"
         >
             <div className="max-w-4xl w-full">
                 <button
